@@ -11,6 +11,7 @@
 	<script>
 	$(document).ready(function () {
 		var lifx_app_token = localStorage.getItem('lifx_app_token');
+		var light = 'all';
 
 		$('#lifx_app_token').val(lifx_app_token);
 
@@ -32,7 +33,7 @@
 			if (lifx_app_token) {
 				$.ajax({
 					method: 'POST',
-					url: 'https://api.lifx.com/v1/lights/all/toggle',
+					url: 'https://api.lifx.com/v1/lights/' + light + '/toggle',
 					data: {
 						'duration': $('#duration').val()
 					},
@@ -81,7 +82,7 @@
 
 				$.ajax({
 					method: 'PUT',
-					url: 'https://api.lifx.com/v1/lights/all/state',
+					url: 'https://api.lifx.com/v1/lights/' + light + '/state',
 					data: {
 						'power': 'on',
 						'brightness': brightness,
@@ -110,6 +111,8 @@
 					var brightness = msg[0]['brightness'];
 					$('#brightness').val(brightness);
 					$('#current-brightness').html( Math.round( brightness * 100 ) + '%' );
+
+					light = 'id:' + msg[0]['id'];
 				});
 			} else {
 				$('#current-brightness').html('');
