@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>LIFX</title>
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	<script src="assets/js/bootstrap.bundle.min.js"></script>
+	<script src="assets/js/jquery-3.6.0.min.js"></script>
+	<script>
+	$(document).ready(function () {
+		var lifx_app_token = localStorage.getItem('lifx_app_token');
+
+		$('#lifx_app_token').val(lifx_app_token);
+
+		$('#save-token').click(function () {
+			if ($('#lifx_app_token').val()) {
+				localStorage.setItem('lifx_app_token', $('#lifx_app_token').val());
+				lifx_app_token = localStorage.getItem('lifx_app_token');
+				load_light();
+			}
+		});
+
+		$('#delete-token').click(function () {
+			localStorage.removeItem('lifx_app_token');
+			lifx_app_token = localStorage.getItem('lifx_app_token');
+			$('#lifx_app_token').val(lifx_app_token);
+		});
+
+		$('#toggle').click(function () {
+			if (lifx_app_token) {
+				$.ajax({
+					method: 'POST',
+					url: 'https://api.lifx.com/v1/lights/all/toggle',
+					data: {
+						'duration': $('#duration').val()
+					},
+					// beforeSend: function (xhr) {
+					// 	xhr.setRequestHeader('Authorization', 'Bearer ' + lifx_app_token);
+					// },
+					headers: {
+						'Authorization': 'Bearer ' + lifx_app_token
+					}
+				});
+				// .done(function (msg) {
+				// 	console.log(msg);
+				// });
+			} else {
+				alert('LIFX personal access token is missing.');
+			}
+		});
+
+		$('#toggle-0s').click(function () {
+			$('#duration').val(0);
+			$('#toggle').click();
+		});
+
+		$('#toggle-1s').click(function () {
+			$('#duration').val(1);
+			$('#toggle').click();
+		});
+
+		$('#toggle-5m').click(function () {
+			$('#duration').val(60*5);
+			$('#toggle').click();
+		});
+
+		$('#brightness').on('input change', function () {
+			if (lifx_app_token) {
+				var brightness = $(this).val();
+				$('#current-brightness').html( Math.round( brightness * 100 ) + '%' );
+			} else {
+				alert('LIFX personal access token is missing.');
+			}
+		});
+
+		$('#brightness').on('change', function () {
+			if (lifx_app_token) {
+				var brightness = $(this).val();
+
+				$.ajax({
+					method: 'PUT',
+					url: 'https://api.lifx.com/v1/lights/all/state',
+					data: {
+						'power': 'on',
+						'brightness': brightness,
+						'duration': '0',
+						'fast': true
+					},
+					headers: {
+						'Authorization': 'Bearer ' + lifx_app_token
+					}
+				});
+			} else {
+				alert('LIFX personal access token is missing.');
+			}
+		});
+
+		function load_light() {
+			if (lifx_app_token) {
+				$.ajax({
+					method: 'GET',
+					url: 'https://api.lifx.com/v1/lights/all',
+					headers: {
+						'Authorization': 'Bearer ' + lifx_app_token
+					}
+				})
+				.done(function (msg) {
+					var brightness = msg[0]['brightness'];
+					$('#brightness').val(brightness);
+					$('#current-brightness').html( Math.round( brightness * 100 ) + '%' );
+				});
+			}
+		}
+
+		load_light();
+	});
+	</script>
+</head>
+<body>
+	<div class="container pt-3">
+		<div class="row">
+			<div class="col">
+				<h1>LIFX</h1>
+				<div class="row g-3 align-items-center mb-3">
+					<div class="col-auto">
+						<label for="lifx_app_token" class="col-form-label">LIFX personal access token</label>
+					</div>
+					<div class="col-auto">
+						<input type="password" id="lifx_app_token" class="form-control">
+					</div>
+					<div class="col-auto">
+						<button type="button" id="save-token" class="btn btn-primary">Save</button>
+					</div>
+					<div class="col-auto">
+						<button type="button" id="delete-token" class="btn btn-danger">Delete</button>
+					</div>
+				</div>
+				<div class="row g-3 align-items-center mb-3">
+					<div class="col-auto">
+						<button type="button" id="toggle" class="btn btn-primary">Toggle on/off</button>
+					</div>
+					<div class="col-auto">
+						<label for="lifx_app_token" class="col-form-label">Duration</label>
+					</div>
+					<div class="col-auto">
+						<input type="text" id="duration" class="form-control d-inline-block w-25" value="1"> <span class="d-inline-block">seconds</span>
+					</div>
+				</div>
+				<div class="row g-3 align-items-center mb-3">
+					<div class="col-auto">
+						<button type="button" id="toggle-0s" class="btn btn-primary">Toggle with 0 second duration</button>
+					</div>
+				</div>
+				<div class="row g-3 align-items-center mb-3">
+					<div class="col-auto">
+						<button type="button" id="toggle-1s" class="btn btn-primary">Toggle with 1 second duration</button>
+					</div>
+				</div>
+				<div class="row g-3 align-items-center mb-3">
+					<div class="col-auto">
+						<button type="button" id="toggle-5m" class="btn btn-primary">Toggle with 5 minutes duration</button>
+					</div>
+				</div>
+				<div class="row g-3 align-items-center">
+					<div class="col-auto">
+						<label for="brightness" class="form-label d-inline-block">Brightness</label>
+					</div>
+					<div class="col-auto">
+						<input type="range" id="brightness" class="form-range d-inline-block" min="0.01" max="1" step="0.01">
+					</div>
+					<div class="col-auto">
+						<span id="current-brightness" class="d-inline-block">
+							<div class="spinner-border text-primary" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
