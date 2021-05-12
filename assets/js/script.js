@@ -25,9 +25,6 @@ $(document).ready(function () {
 
 	if (localStorage.getItem('lifx_app_duration')) {
 		$('#duration').val(localStorage.getItem('lifx_app_duration'));
-	} else {
-		$('#duration').val('0');
-		localStorage.setItem('lifx_app_duration', '0');
 	}
 
 	$('.settings-link').click(function (event) {
