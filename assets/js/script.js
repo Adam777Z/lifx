@@ -15,8 +15,40 @@ $(document).ready(function () {
 		token_alert.show();
 		settings_link_container.show();
 		section_main.hide();
+		$('#delete-token').hide();
 		$('.back-btn').hide();
+
+		if (!localStorage.getItem('lifx_app_duration')) {
+			$('#delete-all-settings').hide();
+		}
 	}
+
+	if (localStorage.getItem('lifx_app_duration')) {
+		$('#duration').val(localStorage.getItem('lifx_app_duration'));
+	} else {
+		$('#duration').val('0');
+		localStorage.setItem('lifx_app_duration', '0');
+	}
+
+	$('.settings-link').click(function (event) {
+		event.preventDefault();
+
+		if (lifx_app_token && section_settings.is(':visible')) {
+			section_settings.hide();
+			section_main.show();
+		} else {
+			section_settings.show();
+			section_main.hide();
+
+			if (lifx_app_token) {
+				$('#delete-token').show();
+			}
+
+			if (localStorage.getItem('lifx_app_duration')) {
+				$('#delete-all-settings').show();
+			}
+		}
+	});
 
 	$('#save-token').click(function () {
 		if ($('#lifx_app_token').val()) {
@@ -34,45 +66,20 @@ $(document).ready(function () {
 		lifx_app_token = localStorage.getItem('lifx_app_token');
 		$('#lifx_app_token').val(lifx_app_token);
 		token_alert.show();
+		$('#delete-token').hide();
 		$('.back-btn').hide();
 	});
 
-	$('.settings-link').click(function (event) {
-		event.preventDefault();
-
-		if (lifx_app_token && section_settings.is(':visible')) {
-			section_settings.hide();
-			section_main.show();
-		} else {
-			section_settings.show();
-			section_main.hide();
-		}
+	$('#delete-all-settings').click(function () {
+		$('#delete-token').click();
+		localStorage.removeItem('lifx_app_duration');
+		$('#duration').val('0');
+		$('#delete-all-settings').hide();
 	});
 
 	$('.back-btn').click(function () {
 		section_settings.hide();
 		section_main.show();
-	});
-
-	$('#toggle').click(function () {
-		if (lifx_app_token) {
-			$.ajax({
-				method: 'POST',
-				url: 'https://api.lifx.com/v1/lights/' + light + '/toggle',
-				data: {
-					'duration': $('#duration').val()
-				},
-				// beforeSend: function (xhr) {
-				// 	xhr.setRequestHeader('Authorization', 'Bearer ' + lifx_app_token);
-				// },
-				headers: {
-					'Authorization': 'Bearer ' + lifx_app_token
-				}
-			});
-			// .done(function (msg) {
-			// 	console.log(msg);
-			// });
-		}
 	});
 
 	$('#power-btn').click(function () {
@@ -98,6 +105,27 @@ $(document).ready(function () {
 		}
 	});
 
+	$('#fade-btn').click(function () {
+		if (lifx_app_token) {
+			$.ajax({
+				method: 'POST',
+				url: 'https://api.lifx.com/v1/lights/' + light + '/toggle',
+				data: {
+					'duration': $('#duration').val()
+				},
+				// beforeSend: function (xhr) {
+				// 	xhr.setRequestHeader('Authorization', 'Bearer ' + lifx_app_token);
+				// },
+				headers: {
+					'Authorization': 'Bearer ' + lifx_app_token
+				}
+			});
+			// .done(function (msg) {
+			// 	console.log(msg);
+			// });
+		}
+	});
+
 	$('#toggle-0s').click(function () {
 		$('#duration').val(0);
 		$('#toggle').click();
@@ -120,6 +148,10 @@ $(document).ready(function () {
 		setTimeout(function() {
 			window.electron.quitApp();
 		}, 500);
+	});
+
+	$('#duration').on('input change', function () {
+		localStorage.setItem('lifx_app_duration', $(this).val());
 	});
 
 	$('#brightness').on('input change', function () {
@@ -169,6 +201,7 @@ $(document).ready(function () {
 				state = msg[0]['power'];
 
 				$('#power-btn').html( 'Turn ' + ( state == 'off' ? 'on' : 'off' ) );
+				$('#fade-btn').html( 'Fade ' + ( state == 'off' ? 'on' : 'off' ) );
 
 				spinner_container.hide();
 				settings_link_container.show();

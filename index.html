@@ -48,6 +48,9 @@
 				<div class="col-auto">
 					<button type="button" id="delete-token" class="btn btn-danger">Delete</button>
 				</div>
+				<div class="col-auto">
+					<button type="button" id="delete-all-settings" class="btn btn-danger">Delete all Settings</button>
+				</div>
 			</div>
 			<div class="row">
 				<div class="col">
@@ -65,13 +68,13 @@
 					</div>
 					<div class="row g-3 align-items-center mb-3">
 						<div class="col-auto">
-							<button type="button" id="toggle" class="btn btn-primary">Toggle on/off</button>
+							<button type="button" id="fade-btn" class="btn btn-primary">Fade on/off</button>
 						</div>
 						<div class="col-auto">
 							<label for="lifx_app_token" class="col-form-label">Duration</label>
 						</div>
 						<div class="col-auto">
-							<input type="text" id="duration" class="form-control d-inline-block w-25" value="0"> <span class="d-inline-block">second(s)</span>
+							<input type="number" id="duration" class="form-control d-inline-block w-25" step="1" min="0" max="86400"> <span class="d-inline-block">second(s)</span>
 						</div>
 					</div>
 					<div class="row g-3 align-items-center mb-3">
