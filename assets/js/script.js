@@ -70,7 +70,7 @@ $(document).ready(function () {
 	$('#delete-all-settings').click(function () {
 		$('#delete-token').click();
 		localStorage.removeItem('lifx_app_duration');
-		$('#duration').val('0');
+		$('#duration').val(0);
 		$('#delete-all-settings').hide();
 	});
 
@@ -123,24 +123,20 @@ $(document).ready(function () {
 		}
 	});
 
-	$('#toggle-0s').click(function () {
+	$('#set-duration-0s').click(function () {
 		$('#duration').val(0);
-		$('#toggle').click();
 	});
 
-	$('#toggle-1s').click(function () {
+	$('#set-duration-1s').click(function () {
 		$('#duration').val(1);
-		$('#toggle').click();
 	});
 
-	$('#toggle-5m').click(function () {
+	$('#set-duration-5m').click(function () {
 		$('#duration').val(60*5);
-		$('#toggle').click();
 	});
 
-	$('#toggle-5mq').click(function () {
+	$('#set-duration-5mq').click(function () {
 		$('#duration').val(60*5);
-		$('#toggle').click();
 
 		setTimeout(function() {
 			window.electron.quitApp();
