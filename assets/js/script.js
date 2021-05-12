@@ -87,7 +87,7 @@ $(document).ready(function () {
 				url: 'https://api.lifx.com/v1/lights/' + light + '/state',
 				data: {
 					'power': state == 'off' ? 'on' : 'off',
-					'duration': '0',
+					'duration': 0,
 					// 'fast': true
 				},
 				headers: {
@@ -105,10 +105,12 @@ $(document).ready(function () {
 	$('#fade-btn').click(function () {
 		if (lifx_app_token) {
 			$.ajax({
-				method: 'POST',
-				url: 'https://api.lifx.com/v1/lights/' + light + '/toggle',
+				method: 'PUT',
+				url: 'https://api.lifx.com/v1/lights/' + light + '/state',
 				data: {
-					'duration': $('#duration').val()
+					'power': state == 'off' ? 'on' : 'off',
+					'duration': $('#duration').val(),
+					// 'fast': true
 				},
 				headers: {
 					'Authorization': 'Bearer ' + lifx_app_token
