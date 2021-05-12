@@ -28,6 +28,14 @@ $(document).ready(function () {
 		$('#second').html( localStorage.getItem('lifx_app_duration') > 1 ? 'seconds' : 'second' );
 	}
 
+	if (localStorage.getItem('lifx_app_quit')) {
+		$('#quit').prop('checked', (localStorage.getItem('lifx_app_quit') == 'true'));
+	}
+
+	if (window.electron) {
+		$('#quit-container').show();
+	}
+
 	$('.settings-link').click(function (event) {
 		event.preventDefault();
 
@@ -42,7 +50,7 @@ $(document).ready(function () {
 				$('#delete-token').show();
 			}
 
-			if (localStorage.getItem('lifx_app_duration')) {
+			if (localStorage.getItem('lifx_app_duration') || localStorage.getItem('lifx_app_quit')) {
 				$('#delete-all-settings').show();
 			}
 		}
@@ -70,8 +78,13 @@ $(document).ready(function () {
 
 	$('#delete-all-settings').click(function () {
 		$('#delete-token').click();
+
 		localStorage.removeItem('lifx_app_duration');
 		$('#duration').val(0);
+
+		localStorage.removeItem('lifx_app_quit');
+		$('#quit').prop('checked', false);
+
 		$('#delete-all-settings').hide();
 	});
 
@@ -95,8 +108,12 @@ $(document).ready(function () {
 			})
 			.done(function (msg) {
 				if (!jQuery.isEmptyObject(msg)) {
-					state = state == 'off' ? 'on' : 'off';
-					update_state_on_buttons();
+					if (window.electron && $('#quit').prop('checked')) {
+						window.electron.quitApp();
+					} else {
+						state = state == 'off' ? 'on' : 'off';
+						update_state_on_buttons();
+					}
 				} else {
 					alert('Error.');
 				}
@@ -119,8 +136,12 @@ $(document).ready(function () {
 			})
 			.done(function (msg) {
 				if (!jQuery.isEmptyObject(msg)) {
-					state = state == 'off' ? 'on' : 'off';
-					update_state_on_buttons();
+					if (window.electron && $('#quit').prop('checked')) {
+						window.electron.quitApp();
+					} else {
+						state = state == 'off' ? 'on' : 'off';
+						update_state_on_buttons();
+					}
 				} else {
 					alert('Error.');
 				}
@@ -140,17 +161,13 @@ $(document).ready(function () {
 		$('#duration').val(60*5).change();
 	});
 
-	$('#set-duration-5mq').click(function () {
-		$('#duration').val(60*5).change();
-
-		setTimeout(function() {
-			window.electron.quitApp();
-		}, 500);
-	});
-
 	$('#duration').on('input change', function () {
 		localStorage.setItem('lifx_app_duration', $(this).val());
 		$('#second').html( $(this).val() > 1 ? 'seconds' : 'second' );
+	});
+
+	$('#quit').change(function () {
+		localStorage.setItem('lifx_app_quit', $(this).prop('checked'));
 	});
 
 	$('#brightness').on('input change', function () {

@@ -5,8 +5,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https://api.lifx.com">
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https://api.lifx.com">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; connect-src https://api.lifx.com;">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; connect-src https://api.lifx.com;">
 	<title>LIFX</title>
 	<link rel="stylesheet" href="./assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="./assets/css/bootstrap-icons.css">
@@ -62,7 +62,7 @@
 			<div class="row">
 				<div class="col">
 					<div class="row g-3 align-items-center mb-3">
-						<div class="col-auto power-btn-container">
+						<div id="power-btn-container" class="col-auto">
 							<button type="button" id="power-btn" class="btn btn-primary">Turn on/off</button>
 						</div>
 					</div>
@@ -79,7 +79,10 @@
 								<button type="button" id="set-duration-0s" class="btn btn-primary">0 second</button>
 								<button type="button" id="set-duration-1s" class="btn btn-primary">1 second</button>
 								<button type="button" id="set-duration-5m" class="btn btn-primary">5 minutes</button>
-								<button type="button" id="set-duration-5mq" class="btn btn-primary">5 minutes and quit</button>
+								<div id="quit-container" class="form-check form-check-inline ms-2" style="display: none;">
+									<input class="form-check-input" type="checkbox" id="quit">
+									<label class="form-check-label" for="quit">Quit</label>
+								</div>
 							</div>
 						</div>
 					</div>
