@@ -74,27 +74,13 @@
 							<label for="lifx_app_token" class="col-form-label">Duration</label>
 						</div>
 						<div class="col-auto">
-							<input type="number" id="duration" class="form-control d-inline-block w-25" step="1" min="0" max="86400" value="0"> <span class="d-inline-block">second(s)</span>
-						</div>
-					</div>
-					<div class="row g-3 align-items-center mb-3">
-						<div class="col-auto">
-							<button type="button" id="set-duration-0s" class="btn btn-primary">Set duration to 0 second</button>
-						</div>
-					</div>
-					<div class="row g-3 align-items-center mb-3">
-						<div class="col-auto">
-							<button type="button" id="set-duration-1s" class="btn btn-primary">Set duration to 1 second</button>
-						</div>
-					</div>
-					<div class="row g-3 align-items-center mb-3">
-						<div class="col-auto">
-							<button type="button" id="set-duration-5m" class="btn btn-primary">Set duration to 5 minutes</button>
-						</div>
-					</div>
-					<div class="row g-3 align-items-center mb-3">
-						<div class="col-auto">
-							<button type="button" id="set-duration-5mq" class="btn btn-primary">Set duration to 5 minutes and quit</button>
+							<input type="number" id="duration" class="form-control d-inline-block" style="width: 80px;" step="1" min="0" max="86400" value="0"> <span id="second" class="d-inline-block">second</span>
+							<div class="d-inline-block ms-2">
+								<button type="button" id="set-duration-0s" class="btn btn-primary">0 second</button>
+								<button type="button" id="set-duration-1s" class="btn btn-primary">1 second</button>
+								<button type="button" id="set-duration-5m" class="btn btn-primary">5 minutes</button>
+								<button type="button" id="set-duration-5mq" class="btn btn-primary">5 minutes and quit</button>
+							</div>
 						</div>
 					</div>
 					<div class="row g-3 align-items-center">

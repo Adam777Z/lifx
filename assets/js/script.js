@@ -25,6 +25,7 @@ $(document).ready(function () {
 
 	if (localStorage.getItem('lifx_app_duration')) {
 		$('#duration').val(localStorage.getItem('lifx_app_duration'));
+		$('#second').html( localStorage.getItem('lifx_app_duration') > 1 ? 'seconds' : 'second' );
 	}
 
 	$('.settings-link').click(function (event) {
@@ -124,19 +125,19 @@ $(document).ready(function () {
 	});
 
 	$('#set-duration-0s').click(function () {
-		$('#duration').val(0);
+		$('#duration').val(0).change();
 	});
 
 	$('#set-duration-1s').click(function () {
-		$('#duration').val(1);
+		$('#duration').val(1).change();
 	});
 
 	$('#set-duration-5m').click(function () {
-		$('#duration').val(60*5);
+		$('#duration').val(60*5).change();
 	});
 
 	$('#set-duration-5mq').click(function () {
-		$('#duration').val(60*5);
+		$('#duration').val(60*5).change();
 
 		setTimeout(function() {
 			window.electron.quitApp();
@@ -145,6 +146,7 @@ $(document).ready(function () {
 
 	$('#duration').on('input change', function () {
 		localStorage.setItem('lifx_app_duration', $(this).val());
+		$('#second').html( $(this).val() > 1 ? 'seconds' : 'second' );
 	});
 
 	$('#brightness').on('input change', function () {
