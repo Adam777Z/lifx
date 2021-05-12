@@ -5,10 +5,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src https://api.lifx.com">
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src https://api.lifx.com">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https://api.lifx.com">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https://api.lifx.com">
 	<title>LIFX</title>
 	<link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="./assets/css/bootstrap-icons.css">
 	<script src="./assets/js/bootstrap.bundle.min.js"></script>
 	<script src="./assets/js/jquery-3.6.0.min.js"></script>
 	<script src="./assets/js/script.min.js"></script>
@@ -18,64 +19,91 @@
 		<div class="row">
 			<div class="col">
 				<h1>LIFX</h1>
-				<div class="row g-3 align-items-center mb-3">
-					<div class="col-auto">
-						<label for="lifx_app_token" class="col-form-label">LIFX personal access token</label>
-					</div>
-					<div class="col-auto">
-						<input type="password" id="lifx_app_token" class="form-control">
-					</div>
-					<div class="col-auto">
-						<button type="button" id="save-token" class="btn btn-primary">Save</button>
-					</div>
-					<div class="col-auto">
-						<button type="button" id="delete-token" class="btn btn-danger">Delete</button>
-					</div>
+			</div>
+			<div id="settings-link-container" class="col" style="display: none;">
+				<div class="d-flex justify-content-end align-self-center">
+					<a class="settings-link" href="#"><i class="bi bi-gear-fill" style="font-size: 2rem;"></i></a>
 				</div>
-				<div class="row g-3 align-items-center mb-3">
-					<div class="col-auto">
-						<button type="button" id="toggle" class="btn btn-primary">Toggle on/off</button>
-					</div>
-					<div class="col-auto">
-						<label for="lifx_app_token" class="col-form-label">Duration</label>
-					</div>
-					<div class="col-auto">
-						<input type="text" id="duration" class="form-control d-inline-block w-25" value="0"> <span class="d-inline-block">second(s)</span>
-					</div>
+			</div>
+		</div>
+		<div class="row token-alert" style="display: none;">
+			<div class="alert alert-danger" role="alert">Please set your LIFX personal access token in <a class="settings-link" href="#"><i class="bi bi-gear-fill me-1"></i>Settings</a>.</div>
+		</div>
+		<div id="spinner-container" class="row justify-content-center" style="display: none;">
+			<div class="spinner-border text-primary" style="width: 15rem; height: 15rem; border-width: 1rem;" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+		</div>
+		<div id="section-settings" style="display: none;">
+			<div class="row">
+				<div class="col-auto">
+					<label for="lifx_app_token" class="col-form-label">LIFX personal access token</label>
 				</div>
-				<div class="row g-3 align-items-center mb-3">
-					<div class="col-auto">
-						<button type="button" id="toggle-0s" class="btn btn-primary">Toggle with 0 second duration</button>
-					</div>
+				<div class="col-auto">
+					<input type="password" id="lifx_app_token" class="form-control">
 				</div>
-				<div class="row g-3 align-items-center mb-3">
-					<div class="col-auto">
-						<button type="button" id="toggle-1s" class="btn btn-primary">Toggle with 1 second duration</button>
-					</div>
+				<div class="col-auto">
+					<button type="button" id="save-token" class="btn btn-primary">Save</button>
 				</div>
-				<div class="row g-3 align-items-center mb-3">
-					<div class="col-auto">
-						<button type="button" id="toggle-5m" class="btn btn-primary">Toggle with 5 minutes duration</button>
-					</div>
+				<div class="col-auto">
+					<button type="button" id="delete-token" class="btn btn-danger">Delete</button>
 				</div>
-				<div class="row g-3 align-items-center mb-3">
-					<div class="col-auto">
-						<button type="button" id="toggle-5mq" class="btn btn-primary">Toggle with 5 minutes duration and quit</button>
-					</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<button type="button" class="btn btn-primary back-btn"><i class="bi bi-arrow-left-circle"></i> Back</button>
 				</div>
-				<div class="row g-3 align-items-center">
-					<div class="col-auto">
-						<label for="brightness" class="form-label d-inline-block">Brightness</label>
+			</div>
+		</div>
+		<div id="section-main" style="display: none;">
+			<div class="row">
+				<div class="col">
+					<div class="row g-3 align-items-center mb-3">
+						<div class="col-auto power-btn-container">
+							<button type="button" id="power-btn" class="btn btn-primary">Turn on/off</button>
+						</div>
 					</div>
-					<div class="col-auto">
-						<input type="range" id="brightness" class="form-range d-inline-block" step="0.01" min="0.01" max="1" value="1">
+					<div class="row g-3 align-items-center mb-3">
+						<div class="col-auto">
+							<button type="button" id="toggle" class="btn btn-primary">Toggle on/off</button>
+						</div>
+						<div class="col-auto">
+							<label for="lifx_app_token" class="col-form-label">Duration</label>
+						</div>
+						<div class="col-auto">
+							<input type="text" id="duration" class="form-control d-inline-block w-25" value="0"> <span class="d-inline-block">second(s)</span>
+						</div>
 					</div>
-					<div class="col-auto">
-						<span id="current-brightness" class="d-inline-block">
-							<div class="spinner-border text-primary" role="status">
-								<span class="visually-hidden">Loading...</span>
-							</div>
-						</span>
+					<div class="row g-3 align-items-center mb-3">
+						<div class="col-auto">
+							<button type="button" id="toggle-0s" class="btn btn-primary">Toggle with 0 second duration</button>
+						</div>
+					</div>
+					<div class="row g-3 align-items-center mb-3">
+						<div class="col-auto">
+							<button type="button" id="toggle-1s" class="btn btn-primary">Toggle with 1 second duration</button>
+						</div>
+					</div>
+					<div class="row g-3 align-items-center mb-3">
+						<div class="col-auto">
+							<button type="button" id="toggle-5m" class="btn btn-primary">Toggle with 5 minutes duration</button>
+						</div>
+					</div>
+					<div class="row g-3 align-items-center mb-3">
+						<div class="col-auto">
+							<button type="button" id="toggle-5mq" class="btn btn-primary">Toggle with 5 minutes duration and quit</button>
+						</div>
+					</div>
+					<div class="row g-3 align-items-center">
+						<div class="col-auto">
+							<label for="brightness" class="form-label d-inline-block">Brightness</label>
+						</div>
+						<div class="col-auto">
+							<input type="range" id="brightness" class="form-range d-inline-block" step="0.01" min="0.01" max="1" value="1">
+						</div>
+						<div class="col-auto">
+							<span id="current-brightness"></span>
+						</div>
 					</div>
 				</div>
 			</div>
