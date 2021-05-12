@@ -1,2 +1,2 @@
 # LIFX
-LIFX Web App
+LIFX Electron App

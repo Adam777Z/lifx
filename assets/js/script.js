@@ -56,6 +56,16 @@ $(document).ready(function () {
 		$('#toggle').click();
 	});
 
+	$('#toggle-5mq').click(function () {
+		$('#duration').val(60*5);
+		$('#toggle').click();
+
+		setTimeout(function() {
+			// window.close();
+			window.electron.quitApp();
+		}, 500);
+	});
+
 	$('#brightness').on('input change', function () {
 		if (lifx_app_token) {
 			var brightness = $(this).val();

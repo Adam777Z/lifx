@@ -4,11 +4,14 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src https://api.lifx.com">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src https://api.lifx.com">
 	<title>LIFX</title>
-	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-	<script src="assets/js/bootstrap.bundle.min.js"></script>
-	<script src="assets/js/jquery-3.6.0.min.js"></script>
-	<script src="assets/js/script.min.js"></script>
+	<link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+	<script src="./assets/js/bootstrap.bundle.min.js"></script>
+	<script src="./assets/js/jquery-3.6.0.min.js"></script>
+	<script src="./assets/js/script.min.js"></script>
 </head>
 <body>
 	<div class="container pt-3">
@@ -53,6 +56,11 @@
 				<div class="row g-3 align-items-center mb-3">
 					<div class="col-auto">
 						<button type="button" id="toggle-5m" class="btn btn-primary">Toggle with 5 minutes duration</button>
+					</div>
+				</div>
+				<div class="row g-3 align-items-center mb-3">
+					<div class="col-auto">
+						<button type="button" id="toggle-5mq" class="btn btn-primary">Toggle with 5 minutes duration and quit</button>
 					</div>
 				</div>
 				<div class="row g-3 align-items-center">
