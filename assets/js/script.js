@@ -87,17 +87,19 @@ $(document).ready(function () {
 				url: 'https://api.lifx.com/v1/lights/' + light + '/state',
 				data: {
 					'power': state == 'off' ? 'on' : 'off',
-					'duration': 0,
-					// 'fast': true
+					'duration': 0
 				},
 				headers: {
 					'Authorization': 'Bearer ' + lifx_app_token
 				}
 			})
 			.done(function (msg) {
-				state = state == 'off' ? 'on' : 'off';
-				// state = msg[0]['power'];
-				update_state_on_buttons();
+				if (!jQuery.isEmptyObject(msg)) {
+					state = state == 'off' ? 'on' : 'off';
+					update_state_on_buttons();
+				} else {
+					alert('Error.');
+				}
 			});
 		}
 	});
@@ -109,17 +111,19 @@ $(document).ready(function () {
 				url: 'https://api.lifx.com/v1/lights/' + light + '/state',
 				data: {
 					'power': state == 'off' ? 'on' : 'off',
-					'duration': $('#duration').val(),
-					// 'fast': true
+					'duration': $('#duration').val()
 				},
 				headers: {
 					'Authorization': 'Bearer ' + lifx_app_token
 				}
 			})
 			.done(function (msg) {
-				state = state == 'off' ? 'on' : 'off';
-				// state = msg[0]['power'];
-				update_state_on_buttons();
+				if (!jQuery.isEmptyObject(msg)) {
+					state = state == 'off' ? 'on' : 'off';
+					update_state_on_buttons();
+				} else {
+					alert('Error.');
+				}
 			});
 		}
 	});
@@ -166,7 +170,7 @@ $(document).ready(function () {
 				data: {
 					'power': 'on',
 					'brightness': brightness,
-					'duration': '0',
+					'duration': 0,
 					'fast': true
 				},
 				headers: {
