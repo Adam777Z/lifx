@@ -117,6 +117,31 @@ $(document).ready(function () {
 		}
 	});
 
+	$('#power-switch').change(function () {
+		if (lifx_app_token) {
+			$.ajax({
+				method: 'PUT',
+				url: 'https://api.lifx.com/v1/lights/' + light + '/state',
+				data: {
+					'power': state == 'off' ? 'on' : 'off',
+					'duration': 0
+				},
+				headers: {
+					'Authorization': 'Bearer ' + lifx_app_token
+				}
+			})
+			.done(function (msg) {
+				if (!jQuery.isEmptyObject(msg)) {
+					state = state == 'off' ? 'on' : 'off';
+					update_state_on_buttons();
+				} else {
+					alert('Error.');
+					$('#power-switch').change();
+				}
+			});
+		}
+	});
+
 	$('#fade-btn').click(function () {
 		if (lifx_app_token) {
 			$.ajax({
@@ -212,6 +237,7 @@ $(document).ready(function () {
 				light = 'id:' + msg[0]['id'];
 				state = msg[0]['power'];
 
+				$('#power-switch').prop('checked', state == 'on');
 				update_state_on_buttons();
 
 				spinner_container.hide();
@@ -222,6 +248,7 @@ $(document).ready(function () {
 	}
 
 	function update_state_on_buttons() {
+		$('#power-switch').prop('checked', state == 'on');
 		$('#power-btn').html( 'Turn ' + ( state == 'off' ? 'on' : 'off' ) );
 		$('#fade-btn').html( 'Fade ' + ( state == 'off' ? 'on' : 'off' ) );
 	}
