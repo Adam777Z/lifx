@@ -108,12 +108,8 @@ $(document).ready(function () {
 			})
 			.done(function (msg) {
 				if (!jQuery.isEmptyObject(msg)) {
-					if (window.electron && $('#quit').prop('checked')) {
-						window.electron.quitApp();
-					} else {
-						state = state == 'off' ? 'on' : 'off';
-						update_state_on_buttons();
-					}
+					state = state == 'off' ? 'on' : 'off';
+					update_state_on_buttons();
 				} else {
 					alert('Error.');
 				}
