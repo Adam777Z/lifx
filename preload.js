@@ -25,6 +25,7 @@ contextBridge.exposeInMainWorld(
 	// },
 	'electron',
 	{
-		'quitApp': () => ipcRenderer.send('quitApp')
+		'quitApp': () => ipcRenderer.send('quitApp'),
+		'lock': () => ipcRenderer.send('lock')
 	}
 );

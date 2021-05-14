@@ -32,8 +32,12 @@ $(document).ready(function () {
 		$('#quit').prop('checked', (localStorage.getItem('lifx_app_quit') == 'true'));
 	}
 
+	if (localStorage.getItem('lifx_app_lock')) {
+		$('#lock').prop('checked', (localStorage.getItem('lifx_app_lock') == 'true'));
+	}
+
 	if (window.electron) {
-		$('#quit-container').show();
+		$('.electron-only').show();
 	}
 
 	$('.settings-link').click(function (event) {
@@ -50,7 +54,7 @@ $(document).ready(function () {
 				$('#delete-token').show();
 			}
 
-			if (localStorage.getItem('lifx_app_duration') || localStorage.getItem('lifx_app_quit')) {
+			if (localStorage.getItem('lifx_app_duration') || localStorage.getItem('lifx_app_quit') || localStorage.getItem('lifx_app_lock')) {
 				$('#delete-all-settings').show();
 			}
 		}
@@ -84,6 +88,9 @@ $(document).ready(function () {
 
 		localStorage.removeItem('lifx_app_quit');
 		$('#quit').prop('checked', false);
+
+		localStorage.removeItem('lifx_app_lock');
+		$('#lock').prop('checked', false);
 
 		$('#delete-all-settings').hide();
 	});
@@ -133,6 +140,10 @@ $(document).ready(function () {
 			})
 			.done(function (msg) {
 				if (!jQuery.isEmptyObject(msg)) {
+					if (window.electron && $('#lock').prop('checked')) {
+						window.electron.lock();
+					}
+
 					if (window.electron && $('#quit').prop('checked')) {
 						window.electron.quitApp();
 					} else {
@@ -165,6 +176,10 @@ $(document).ready(function () {
 
 	$('#quit').change(function () {
 		localStorage.setItem('lifx_app_quit', $(this).prop('checked'));
+	});
+
+	$('#lock').change(function () {
+		localStorage.setItem('lifx_app_lock', $(this).prop('checked'));
 	});
 
 	$('#brightness').on('input change', function () {
