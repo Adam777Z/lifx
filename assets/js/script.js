@@ -7,6 +7,7 @@ $(document).ready(function () {
 	var section_main = $('#section-main');
 	var light = 'all';
 	var state;
+	var duration = 0;
 
 	if (lifx_app_token) {
 		$('#lifx_app_token').val(lifx_app_token);
@@ -18,15 +19,34 @@ $(document).ready(function () {
 		$('#delete-token').hide();
 		$('.back-btn').hide();
 
-		if (!localStorage.getItem('lifx_app_duration')) {
+		if (
+			! localStorage.getItem('lifx_app_duration_s')
+			&&
+			! localStorage.getItem('lifx_app_duration_m')
+			&&
+			! localStorage.getItem('lifx_app_duration_h')
+			&&
+			! localStorage.getItem('lifx_app_quit')
+			&&
+			! localStorage.getItem('lifx_app_lock')
+		) {
 			$('#delete-all-settings').hide();
 		}
 	}
 
-	if (localStorage.getItem('lifx_app_duration')) {
-		$('#duration').val(localStorage.getItem('lifx_app_duration'));
-		$('#second').html( localStorage.getItem('lifx_app_duration') > 1 ? 'seconds' : 'second' );
+	if (localStorage.getItem('lifx_app_duration_s')) {
+		$('#duration-s').val(localStorage.getItem('lifx_app_duration_s'));
 	}
+
+	if (localStorage.getItem('lifx_app_duration_m')) {
+		$('#duration-m').val(localStorage.getItem('lifx_app_duration_m'));
+	}
+
+	if (localStorage.getItem('lifx_app_duration_h')) {
+		$('#duration-h').val(localStorage.getItem('lifx_app_duration_h'));
+	}
+
+	set_duration();
 
 	if (localStorage.getItem('lifx_app_quit')) {
 		$('#quit').prop('checked', (localStorage.getItem('lifx_app_quit') == 'true'));
@@ -54,7 +74,17 @@ $(document).ready(function () {
 				$('#delete-token').show();
 			}
 
-			if (localStorage.getItem('lifx_app_duration') || localStorage.getItem('lifx_app_quit') || localStorage.getItem('lifx_app_lock')) {
+			if (
+				localStorage.getItem('lifx_app_duration_s')
+				||
+				localStorage.getItem('lifx_app_duration_m')
+				||
+				localStorage.getItem('lifx_app_duration_h')
+				||
+				localStorage.getItem('lifx_app_quit')
+				||
+				localStorage.getItem('lifx_app_lock')
+			) {
 				$('#delete-all-settings').show();
 			}
 		}
@@ -83,8 +113,12 @@ $(document).ready(function () {
 	$('#delete-all-settings').click(function () {
 		$('#delete-token').click();
 
-		localStorage.removeItem('lifx_app_duration');
-		$('#duration').val(0);
+		localStorage.removeItem('lifx_app_duration_s');
+		localStorage.removeItem('lifx_app_duration_m');
+		localStorage.removeItem('lifx_app_duration_h');
+		$('#duration-s').val(0);
+		$('#duration-m').val(0);
+		$('#duration-h').val(0);
 
 		localStorage.removeItem('lifx_app_quit');
 		$('#quit').prop('checked', false);
@@ -132,7 +166,7 @@ $(document).ready(function () {
 				url: 'https://api.lifx.com/v1/lights/' + light + '/state',
 				data: {
 					'power': state == 'off' ? 'on' : 'off',
-					'duration': $('#duration').val()
+					'duration': duration
 				},
 				headers: {
 					'Authorization': 'Bearer ' + lifx_app_token
@@ -157,21 +191,16 @@ $(document).ready(function () {
 		}
 	});
 
-	$('#set-duration-0s').click(function () {
-		$('#duration').val(0).change();
-	});
+	function set_duration() {
+		duration = parseInt( $( '#duration-s' ).val() ) + ( parseInt( $( '#duration-m' ).val() ) * 60 ) + ( parseInt( $( '#duration-h' ).val() ) * 60 * 60 );
 
-	$('#set-duration-1s').click(function () {
-		$('#duration').val(1).change();
-	});
+		localStorage.setItem('lifx_app_duration_s', $( '#duration-s' ).val());
+		localStorage.setItem('lifx_app_duration_m', $( '#duration-m' ).val());
+		localStorage.setItem('lifx_app_duration_h', $( '#duration-h' ).val());
+	}
 
-	$('#set-duration-5m').click(function () {
-		$('#duration').val(60*5).change();
-	});
-
-	$('#duration').on('input change', function () {
-		localStorage.setItem('lifx_app_duration', $(this).val());
-		$('#second').html( $(this).val() > 1 ? 'seconds' : 'second' );
+	$('#duration-s, #duration-m, #duration-h').on('input change', function () {
+		set_duration();
 	});
 
 	$('#quit').change(function () {
