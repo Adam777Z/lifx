@@ -251,10 +251,7 @@ $(document).ready(function () {
 				}
 			})
 			.done(function (msg) {
-				if (!msg[0]['connected']) {
-					spinner_container.hide();
-					section_offline.show();
-				} else {
+				if (msg[0]['connected']) {
 					var brightness = msg[0]['brightness'];
 
 					$('#brightness').val(brightness);
@@ -269,6 +266,9 @@ $(document).ready(function () {
 					spinner_container.hide();
 					settings_link_container.show();
 					section_main.show();
+				} else {
+					spinner_container.hide();
+					section_offline.show();
 				}
 			});
 		}
