@@ -251,6 +251,8 @@ $(document).ready(function () {
 				}
 			})
 			.done(function (msg) {
+				spinner_container.hide();
+
 				if (msg[0]['connected']) {
 					var brightness = msg[0]['brightness'];
 
@@ -263,11 +265,9 @@ $(document).ready(function () {
 					$('#power-switch').prop('checked', state == 'on');
 					update_state_on_buttons();
 
-					spinner_container.hide();
 					settings_link_container.show();
 					section_main.show();
 				} else {
-					spinner_container.hide();
 					section_offline.show();
 				}
 			});
