@@ -5,6 +5,7 @@ $(document).ready(function () {
 	var settings_link_container = $('#settings-link-container');
 	var section_settings = $('#section-settings');
 	var section_main = $('#section-main');
+	var section_offline = $('#section-offline');
 	var light = 'all';
 	var state;
 	var duration = 0;
@@ -250,22 +251,25 @@ $(document).ready(function () {
 				}
 			})
 			.done(function (msg) {
-				$('#status').html(msg[0]['connected'] ? 'Connected' : 'Disconnected');
+				if (!msg[0]['connected']) {
+					spinner_container.hide();
+					section_offline.show();
+				} else {
+					var brightness = msg[0]['brightness'];
 
-				var brightness = msg[0]['brightness'];
+					$('#brightness').val(brightness);
+					$('#current-brightness').html( Math.round( brightness * 100 ) + '%' );
 
-				$('#brightness').val(brightness);
-				$('#current-brightness').html( Math.round( brightness * 100 ) + '%' );
+					light = 'id:' + msg[0]['id'];
+					state = msg[0]['power'];
 
-				light = 'id:' + msg[0]['id'];
-				state = msg[0]['power'];
+					$('#power-switch').prop('checked', state == 'on');
+					update_state_on_buttons();
 
-				$('#power-switch').prop('checked', state == 'on');
-				update_state_on_buttons();
-
-				spinner_container.hide();
-				settings_link_container.show();
-				section_main.show();
+					spinner_container.hide();
+					settings_link_container.show();
+					section_main.show();
+				}
 			});
 		}
 	}
