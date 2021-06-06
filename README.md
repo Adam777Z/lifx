@@ -1,2 +1,2 @@
 # LIFX
-LIFX Electron App
+LIFX App (unofficial)

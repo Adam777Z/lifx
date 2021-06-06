@@ -250,7 +250,10 @@ $(document).ready(function () {
 				}
 			})
 			.done(function (msg) {
+				$('#status').html(msg[0]['connected'] ? 'Connected' : 'Disconnected');
+
 				var brightness = msg[0]['brightness'];
+
 				$('#brightness').val(brightness);
 				$('#current-brightness').html( Math.round( brightness * 100 ) + '%' );
 
