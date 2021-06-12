@@ -5,6 +5,7 @@ $(document).ready(function () {
 	var settings_link_container = $('#settings-link-container');
 	var section_settings = $('#section-settings');
 	var section_main = $('#section-main');
+	var section_debug = $('#section-debug');
 	var section_offline = $('#section-offline');
 	var light = 'all';
 	var state;
@@ -21,6 +22,8 @@ $(document).ready(function () {
 		$('.back-btn').hide();
 
 		if (
+			! localStorage.getItem('debug_enabled')
+			&&
 			! localStorage.getItem('lifx_app_duration_s')
 			&&
 			! localStorage.getItem('lifx_app_duration_m')
@@ -32,6 +35,16 @@ $(document).ready(function () {
 			! localStorage.getItem('lifx_app_lock')
 		) {
 			$('#delete-all-settings').hide();
+		}
+	}
+
+	if (localStorage.getItem('debug_enabled')) {
+		var debug_enabled = localStorage.getItem('debug_enabled') == 'true';
+
+		$('#debug-enabled').prop('checked', debug_enabled);
+
+		if (debug_enabled) {
+			section_debug.show();
 		}
 	}
 
@@ -76,6 +89,8 @@ $(document).ready(function () {
 			}
 
 			if (
+				localStorage.getItem('debug_enabled')
+				||
 				localStorage.getItem('lifx_app_duration_s')
 				||
 				localStorage.getItem('lifx_app_duration_m')
@@ -114,6 +129,9 @@ $(document).ready(function () {
 	$('#delete-all-settings').click(function () {
 		$('#delete-token').click();
 
+		localStorage.removeItem('debug_enabled');
+		$('#debug-enabled').prop('checked', false);
+
 		localStorage.removeItem('lifx_app_duration_s');
 		localStorage.removeItem('lifx_app_duration_m');
 		localStorage.removeItem('lifx_app_duration_h');
@@ -128,6 +146,16 @@ $(document).ready(function () {
 		$('#lock').prop('checked', false);
 
 		$('#delete-all-settings').hide();
+	});
+
+	$('#debug-enabled').change(function () {
+		if ($(this).prop('checked')) {
+			localStorage.setItem('debug_enabled', $(this).prop('checked'));
+			section_debug.show();
+		} else {
+			localStorage.removeItem('debug_enabled');
+			section_debug.hide();
+		}
 	});
 
 	$('.back-btn').click(function () {
@@ -205,11 +233,19 @@ $(document).ready(function () {
 	});
 
 	$('#quit').change(function () {
-		localStorage.setItem('lifx_app_quit', $(this).prop('checked'));
+		if ($(this).prop('checked')) {
+			localStorage.setItem('lifx_app_quit', $(this).prop('checked'));
+		} else {
+			localStorage.removeItem('lifx_app_quit');
+		}
 	});
 
 	$('#lock').change(function () {
-		localStorage.setItem('lifx_app_lock', $(this).prop('checked'));
+		if ($(this).prop('checked')) {
+			localStorage.setItem('lifx_app_lock', $(this).prop('checked'));
+		} else {
+			localStorage.removeItem('lifx_app_lock');
+		}
 	});
 
 	$('#brightness').on('input change', function () {
@@ -253,6 +289,10 @@ $(document).ready(function () {
 			.done(function (msg) {
 				spinner_container.hide();
 
+				if ($('#debug-enabled').prop('checked')) {
+					$('#debug-info').html(syntax_highlight(JSON.stringify(msg, null, 4))).show();
+				}
+
 				if (msg[0]['connected']) {
 					var brightness = msg[0]['brightness'];
 
@@ -277,5 +317,24 @@ $(document).ready(function () {
 	function update_state_on_buttons() {
 		$('#power-switch').prop('checked', state == 'on');
 		$('#fade-btn').html( 'Fade ' + ( state == 'off' ? 'on' : 'off' ) );
+	}
+
+	function syntax_highlight(json) {
+		json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+		return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+			var cls = 'number';
+			if (/^"/.test(match)) {
+				if (/:$/.test(match)) {
+					cls = 'key';
+				} else {
+					cls = 'string';
+				}
+			} else if (/true|false/.test(match)) {
+				cls = 'boolean';
+			} else if (/null/.test(match)) {
+				cls = 'null';
+			}
+			return '<span class="' + cls + '">' + match + '</span>';
+		});
 	}
 });
