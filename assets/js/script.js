@@ -287,29 +287,39 @@ $(document).ready(function () {
 				}
 			})
 			.done(function (msg) {
-				spinner_container.hide();
+				// Load again to avoid incorrect power state
+				$.ajax({
+					method: 'GET',
+					url: 'https://api.lifx.com/v1/lights/all',
+					headers: {
+						'Authorization': 'Bearer ' + lifx_app_token
+					}
+				})
+				.done(function (msg) {
+					spinner_container.hide();
 
-				if ($('#debug-enabled').prop('checked')) {
-					$('#debug-info').html(syntax_highlight(JSON.stringify(msg, null, 4))).show();
-				}
+					if ($('#debug-enabled').prop('checked')) {
+						$('#debug-info').html(syntax_highlight(JSON.stringify(msg, null, 4))).show();
+					}
 
-				if (msg[0]['connected']) {
-					var brightness = msg[0]['brightness'];
+					if (msg[0]['connected']) {
+						var brightness = msg[0]['brightness'];
 
-					$('#brightness').val(brightness);
-					$('#current-brightness').html( Math.round( brightness * 100 ) + '%' );
+						$('#brightness').val(brightness);
+						$('#current-brightness').html( Math.round( brightness * 100 ) + '%' );
 
-					light = 'id:' + msg[0]['id'];
-					state = msg[0]['power'];
+						light = 'id:' + msg[0]['id'];
+						state = msg[0]['power'];
 
-					$('#power-switch').prop('checked', state == 'on');
-					update_state_on_buttons();
+						$('#power-switch').prop('checked', state == 'on');
+						update_state_on_buttons();
 
-					settings_link_container.show();
-					section_main.show();
-				} else {
-					section_offline.show();
-				}
+						settings_link_container.show();
+						section_main.show();
+					} else {
+						section_offline.show();
+					}
+				});
 			});
 		}
 	}
