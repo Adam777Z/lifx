@@ -7,7 +7,7 @@ $(document).ready(function () {
 	var section_main = $('#section-main');
 	var section_debug = $('#section-debug');
 	var section_offline = $('#section-offline');
-	var light = 'all';
+	var selector = 'all';
 	var state;
 	var duration = 0;
 
@@ -167,7 +167,7 @@ $(document).ready(function () {
 		if (lifx_app_token) {
 			$.ajax({
 				method: 'PUT',
-				url: 'https://api.lifx.com/v1/lights/' + light + '/state',
+				url: 'https://api.lifx.com/v1/lights/' + selector + '/state',
 				data: {
 					'power': state == 'off' ? 'on' : 'off',
 					'duration': 0
@@ -192,7 +192,7 @@ $(document).ready(function () {
 		if (lifx_app_token) {
 			$.ajax({
 				method: 'PUT',
-				url: 'https://api.lifx.com/v1/lights/' + light + '/state',
+				url: 'https://api.lifx.com/v1/lights/' + selector + '/state',
 				data: {
 					'power': state == 'off' ? 'on' : 'off',
 					'duration': duration
@@ -261,7 +261,7 @@ $(document).ready(function () {
 
 			$.ajax({
 				method: 'PUT',
-				url: 'https://api.lifx.com/v1/lights/' + light + '/state',
+				url: 'https://api.lifx.com/v1/lights/' + selector + '/state',
 				data: {
 					'power': 'on',
 					'brightness': brightness,
@@ -308,7 +308,7 @@ $(document).ready(function () {
 						$('#brightness').val(brightness);
 						$('#current-brightness').html( Math.round( brightness * 100 ) + '%' );
 
-						light = 'id:' + msg[0]['id'];
+						selector = 'id:' + msg[0]['id'];
 						state = msg[0]['power'];
 
 						$('#power-switch').prop('checked', state == 'on');
