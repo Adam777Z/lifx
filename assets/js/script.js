@@ -4,16 +4,22 @@ $(document).ready(function () {
 	var spinner_container = $('#spinner-container');
 	var settings_link_container = $('#settings-link-container');
 	var section_settings = $('#section-settings');
+	var section_lights = $('#section-lights');
 	var section_main = $('#section-main');
 	var section_debug = $('#section-debug');
 	var section_offline = $('#section-offline');
+	var lights_select = $('select[id="lights"]');
+	var lights = {};
+	var groups = {};
+	var locations = {};
 	var selector = 'all';
+	var id;
 	var state;
 	var duration = 0;
 
 	if (lifx_app_token) {
 		$('#lifx_app_token').val(lifx_app_token);
-		load_light();
+		get_lights();
 	} else {
 		token_alert.show();
 		settings_link_container.show();
@@ -23,6 +29,8 @@ $(document).ready(function () {
 
 		if (
 			! localStorage.getItem('debug_enabled')
+			&&
+			! localStorage.getItem('selected')
 			&&
 			! localStorage.getItem('lifx_app_duration_s')
 			&&
@@ -79,10 +87,13 @@ $(document).ready(function () {
 
 		if (lifx_app_token && section_settings.is(':visible')) {
 			section_settings.hide();
-			section_main.show();
+			section_lights.show();
+			lights_select.change();
 		} else {
 			section_settings.show();
+			section_lights.hide();
 			section_main.hide();
+			section_offline.hide();
 
 			if (lifx_app_token) {
 				$('#delete-token').show();
@@ -90,6 +101,8 @@ $(document).ready(function () {
 
 			if (
 				localStorage.getItem('debug_enabled')
+				||
+				localStorage.getItem('selected')
 				||
 				localStorage.getItem('lifx_app_duration_s')
 				||
@@ -113,7 +126,7 @@ $(document).ready(function () {
 			token_alert.hide();
 			section_settings.hide();
 			$('.back-btn').show();
-			load_light();
+			get_lights();
 		}
 	});
 
@@ -131,6 +144,9 @@ $(document).ready(function () {
 
 		localStorage.removeItem('debug_enabled');
 		$('#debug-enabled').prop('checked', false);
+
+		lights_select.val('all');
+		localStorage.removeItem('selected');
 
 		localStorage.removeItem('lifx_app_duration_s');
 		localStorage.removeItem('lifx_app_duration_m');
@@ -159,8 +175,10 @@ $(document).ready(function () {
 	});
 
 	$('.back-btn').click(function () {
+		// $('.settings-link').click();
 		section_settings.hide();
-		section_main.show();
+		section_lights.show();
+		lights_select.change();
 	});
 
 	$('#power-switch').change(function () {
@@ -179,7 +197,7 @@ $(document).ready(function () {
 			.done(function (msg) {
 				if (!jQuery.isEmptyObject(msg)) {
 					state = state == 'off' ? 'on' : 'off';
-					update_state_on_buttons();
+					update_state();
 				} else {
 					alert('Error.');
 					$('#power-switch').prop('checked', state == 'on');
@@ -211,7 +229,7 @@ $(document).ready(function () {
 						window.electron.quitApp();
 					} else {
 						state = state == 'off' ? 'on' : 'off';
-						update_state_on_buttons();
+						update_state();
 					}
 				} else {
 					alert('Error.');
@@ -221,11 +239,11 @@ $(document).ready(function () {
 	});
 
 	function set_duration() {
-		duration = parseInt( $( '#duration-s' ).val() ) + ( parseInt( $( '#duration-m' ).val() ) * 60 ) + ( parseInt( $( '#duration-h' ).val() ) * 60 * 60 );
+		duration = parseInt( $('#duration-s').val() ) + ( parseInt( $('#duration-m').val() ) * 60 ) + ( parseInt( $('#duration-h').val() ) * 60 * 60 );
 
-		localStorage.setItem('lifx_app_duration_s', $( '#duration-s' ).val());
-		localStorage.setItem('lifx_app_duration_m', $( '#duration-m' ).val());
-		localStorage.setItem('lifx_app_duration_h', $( '#duration-h' ).val());
+		localStorage.setItem('lifx_app_duration_s', $('#duration-s').val());
+		localStorage.setItem('lifx_app_duration_m', $('#duration-m').val());
+		localStorage.setItem('lifx_app_duration_h', $('#duration-h').val());
 	}
 
 	$('#duration-s, #duration-m, #duration-h').on('input change', function () {
@@ -247,6 +265,12 @@ $(document).ready(function () {
 			localStorage.removeItem('lifx_app_lock');
 		}
 	});
+
+	function update_state() {
+		$('#power-switch').prop('checked', state == 'on');
+		$('#fade-btn').html( 'Fade ' + ( state == 'off' ? 'on' : 'off' ) );
+		lights[id]['power'] = state;
+	}
 
 	$('#brightness').on('input change', function () {
 		if (lifx_app_token) {
@@ -275,13 +299,13 @@ $(document).ready(function () {
 		}
 	});
 
-	function load_light() {
+	function get_lights() {
 		if (lifx_app_token) {
 			spinner_container.show();
 
 			$.ajax({
 				method: 'GET',
-				url: 'https://api.lifx.com/v1/lights/all',
+				url: 'https://api.lifx.com/v1/lights/' + selector,
 				headers: {
 					'Authorization': 'Bearer ' + lifx_app_token
 				}
@@ -290,43 +314,100 @@ $(document).ready(function () {
 				// Load again to avoid incorrect power state
 				$.ajax({
 					method: 'GET',
-					url: 'https://api.lifx.com/v1/lights/all',
+					url: 'https://api.lifx.com/v1/lights/' + selector,
 					headers: {
 						'Authorization': 'Bearer ' + lifx_app_token
 					}
 				})
 				.done(function (msg) {
 					spinner_container.hide();
+					settings_link_container.show();
 
 					if ($('#debug-enabled').prop('checked')) {
 						$('#debug-info').html(syntax_highlight(JSON.stringify(msg, null, 4))).show();
 					}
 
-					if (msg[0]['connected']) {
-						var brightness = msg[0]['brightness'];
+					lights = {};
+					groups = {};
+					locations = {};
 
-						$('#brightness').val(brightness);
-						$('#current-brightness').html( Math.round( brightness * 100 ) + '%' );
+					msg.forEach(function (light) {
+						lights[ light['id'] ] = light;
 
-						selector = 'id:' + msg[0]['id'];
-						state = msg[0]['power'];
+						groups[ light['group']['id'] ] = light['group'];
+						groups[ light['group']['id'] ]['first_light_id'] = light['id'];
 
-						$('#power-switch').prop('checked', state == 'on');
-						update_state_on_buttons();
+						locations[ light['location']['id'] ] = light['location'];
+						locations[ light['location']['id'] ]['first_light_id'] = light['id'];
+					});
 
-						settings_link_container.show();
-						section_main.show();
-					} else {
-						section_offline.show();
+					$.each( locations, function ( key, element ) {
+						lights_select.append('<option value="' + element['id'] + '" data-type="location">Location: ' + element['name'] + '</option>');
+					} );
+
+					$.each( groups, function ( key, element ) {
+						lights_select.append('<option value="' + element['id'] + '" data-type="group">Group: ' + element['name'] + '</option>');
+					} );
+
+					$.each( lights, function ( key, element ) {
+						lights_select.append('<option value="' + element['id'] + '" data-type="light">Light: ' + element['label'] + '</option>');
+					} );
+
+					if (localStorage.getItem('selected')) {
+						lights_select.val(localStorage.getItem('selected'));
 					}
+
+					lights_select.change();
+					section_lights.show();
 				});
 			});
 		}
 	}
 
-	function update_state_on_buttons() {
-		$('#power-switch').prop('checked', state == 'on');
-		$('#fade-btn').html( 'Fade ' + ( state == 'off' ? 'on' : 'off' ) );
+	lights_select.on('change', function () {
+		id = $(this).val();
+
+		localStorage.setItem('selected', id);
+
+		let type = $(this).find('option:selected').data('type');
+		let new_selector = '';
+
+		if (type == 'light') {
+			new_selector = 'id:';
+		} else if (type == 'group') {
+			new_selector = 'group_id:';
+		} else if (type == 'location') {
+			new_selector = 'location_id:';
+		}
+
+		selector = new_selector + id;
+
+		if (id == 'all') {
+			id = $(this).find('option[data-type="light"]').first().val();
+		} else if (type == 'group') {
+			id = groups[id]['first_light_id'];
+		} else if (type == 'location') {
+			id = locations[id]['first_light_id'];
+		}
+
+		load(id);
+	});
+
+	function load(id) {
+		if (lights[id]['connected']) {
+			var brightness = lights[id]['brightness'];
+			$('#brightness').val(brightness);
+			$('#current-brightness').html( Math.round( brightness * 100 ) + '%' );
+
+			state = lights[id]['power'];
+			$('#power-switch').prop('checked', state == 'on');
+			update_state();
+
+			section_main.show();
+		} else {
+			section_main.hide();
+			section_offline.show();
+		}
 	}
 
 	function syntax_highlight(json) {
