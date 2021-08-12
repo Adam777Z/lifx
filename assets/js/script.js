@@ -2,7 +2,7 @@ $(document).ready(function () {
 	var lifx_app_token = localStorage.getItem('lifx_app_token');
 	var token_alert = $('.token-alert');
 	var spinner_container = $('#spinner-container');
-	var settings_link_container = $('#settings-link-container');
+	var top_container = $('#top-container');
 	var section_settings = $('#section-settings');
 	var section_lights = $('#section-lights');
 	var section_main = $('#section-main');
@@ -22,7 +22,7 @@ $(document).ready(function () {
 		get_lights();
 	} else {
 		token_alert.show();
-		settings_link_container.show();
+		top_container.show();
 		section_main.hide();
 		$('#delete-token').hide();
 		$('.back-btn').hide();
@@ -81,6 +81,15 @@ $(document).ready(function () {
 	if (window.electron) {
 		$('.electron-only').show();
 	}
+
+	$('.reload-link').click(function (event) {
+		event.preventDefault();
+		top_container.hide();
+		section_lights.hide();
+		section_main.hide();
+		section_offline.hide();
+		get_lights();
+	});
 
 	$('.settings-link').click(function (event) {
 		event.preventDefault();
@@ -321,7 +330,7 @@ $(document).ready(function () {
 				})
 				.done(function (msg) {
 					spinner_container.hide();
-					settings_link_container.show();
+					top_container.show();
 
 					if ($('#debug-enabled').prop('checked')) {
 						$('#debug-info').html(syntax_highlight(JSON.stringify(msg, null, 4))).show();
@@ -340,6 +349,8 @@ $(document).ready(function () {
 						locations[ light['location']['id'] ] = light['location'];
 						locations[ light['location']['id'] ]['first_light_id'] = light['id'];
 					});
+
+					lights_select.find('option').slice(1).remove();
 
 					$.each( locations, function ( key, element ) {
 						lights_select.append('<option value="' + element['id'] + '" data-type="location">Location: ' + element['name'] + '</option>');
