@@ -24,16 +24,25 @@
 			<div id="top-container" class="col" style="display: none;">
 				<div class="d-flex justify-content-end align-items-center">
 					<a class="reload-link me-3" href="#"><i class="bi bi-arrow-clockwise" style="font-size: 2rem;"></i></a>
-					<a class="settings-link" style="margin-top: -.25rem;" href="#"><i class="bi bi-gear-fill" style="font-size: 2rem;"></i></a>
+					<a class="settings-link" href="#"><i class="bi bi-gear-fill" style="font-size: 2rem;"></i></a>
 				</div>
 			</div>
 		</div>
-		<div class="row token-alert" style="display: none;">
-			<div class="alert alert-danger" role="alert">Please set your LIFX personal access token in <a class="settings-link" href="#"><i class="bi bi-gear-fill me-1"></i>Settings</a>.</div>
+		<div id="error-alert" class="row" style="display: none;">
+			<div class="col">
+				<div class="alert alert-danger" role="alert">Error.</div>
+			</div>
 		</div>
-		<div id="spinner-container" class="row justify-content-center" style="display: none;">
-			<div class="spinner-border text-primary" style="width: 15rem; height: 15rem; border-width: 1rem;" role="status">
-				<span class="visually-hidden">Loading...</span>
+		<div id="token-alert" class="row" style="display: none;">
+			<div class="col">
+				<div class="alert alert-danger" role="alert">Please set your LIFX personal access token in <a class="settings-link" href="#"><i class="bi bi-gear-fill me-1"></i>Settings</a>.</div>
+			</div>
+		</div>
+		<div id="spinner-container" class="row" style="display: none;">
+			<div class="col d-flex justify-content-center">
+				<div class="spinner-border text-primary" style="width: 15rem; height: 15rem; border-width: 1rem;" role="status">
+					<span class="visually-hidden">Loading...</span>
+				</div>
 			</div>
 		</div>
 		<div id="section-settings" style="display: none;">

@@ -1,13 +1,16 @@
 $(document).ready(function () {
 	var lifx_app_token = localStorage.getItem('lifx_app_token');
-	var token_alert = $('.token-alert');
+	var error_alert = $('#error-alert');
+	var token_alert = $('#token-alert');
 	var spinner_container = $('#spinner-container');
 	var top_container = $('#top-container');
+	var reload_link = $('.reload-link');
 	var section_settings = $('#section-settings');
 	var section_lights = $('#section-lights');
 	var section_main = $('#section-main');
 	var section_debug = $('#section-debug');
 	var section_offline = $('#section-offline');
+	var debug_enabled = $('#debug-enabled');
 	var lights_select = $('select[id="lights"]');
 	var lights = {};
 	var groups = {};
@@ -19,9 +22,11 @@ $(document).ready(function () {
 
 	if (lifx_app_token) {
 		$('#lifx_app_token').val(lifx_app_token);
+		reload_link.show();
 		get_lights();
 	} else {
 		token_alert.show();
+		reload_link.hide();
 		top_container.show();
 		section_main.hide();
 		$('#delete-token').hide();
@@ -47,7 +52,7 @@ $(document).ready(function () {
 	}
 
 	if (localStorage.getItem('debug_enabled')) {
-		$('#debug-enabled').prop('checked', (localStorage.getItem('debug_enabled') == 'true')).change();
+		debug_enabled.prop('checked', (localStorage.getItem('debug_enabled') == 'true')).change();
 	}
 
 	if (localStorage.getItem('lifx_app_duration_s')) {
@@ -76,7 +81,7 @@ $(document).ready(function () {
 		$('.electron-only').show();
 	}
 
-	$('.reload-link').click(function (event) {
+	reload_link.click(function (event) {
 		event.preventDefault();
 		top_container.hide();
 		section_lights.hide();
@@ -91,10 +96,15 @@ $(document).ready(function () {
 
 		if (lifx_app_token && section_settings.is(':visible')) {
 			section_settings.hide();
-			section_lights.show();
-			lights_select.change();
+			reload_link.show();
+
+			if (!error_alert.is(':visible')) {
+				lights_select.change();
+				section_lights.show();
+			}
 		} else {
 			section_settings.show();
+			reload_link.hide();
 			section_lights.hide();
 			section_main.hide();
 			section_offline.hide();
@@ -127,10 +137,14 @@ $(document).ready(function () {
 		if ($('#lifx_app_token').val()) {
 			localStorage.setItem('lifx_app_token', $('#lifx_app_token').val());
 			lifx_app_token = localStorage.getItem('lifx_app_token');
+			error_alert.hide();
 			token_alert.hide();
 			section_settings.hide();
 			$('.back-btn').show();
+			reload_link.show();
 			get_lights();
+		} else {
+			$('#delete-token').click();
 		}
 	});
 
@@ -138,16 +152,18 @@ $(document).ready(function () {
 		localStorage.removeItem('lifx_app_token');
 		lifx_app_token = localStorage.getItem('lifx_app_token');
 		$('#lifx_app_token').val(lifx_app_token);
+		error_alert.hide();
 		token_alert.show();
 		$('#delete-token').hide();
 		$('.back-btn').hide();
+		reload_link.hide();
 	});
 
 	$('#delete-all-settings').click(function () {
 		$('#delete-token').click();
 
 		localStorage.removeItem('debug_enabled');
-		$('#debug-enabled').prop('checked', false);
+		debug_enabled.prop('checked', false);
 
 		lights_select.val('all');
 		localStorage.removeItem('selected');
@@ -168,7 +184,7 @@ $(document).ready(function () {
 		$('#delete-all-settings').hide();
 	});
 
-	$('#debug-enabled').change(function () {
+	debug_enabled.change(function () {
 		if ($(this).prop('checked')) {
 			localStorage.setItem('debug_enabled', $(this).prop('checked'));
 			section_debug.show();
@@ -181,8 +197,12 @@ $(document).ready(function () {
 	$('.back-btn').click(function () {
 		// $('.settings-link').click();
 		section_settings.hide();
-		section_lights.show();
-		lights_select.change();
+		reload_link.show();
+
+		if (lifx_app_token && !error_alert.is(':visible')) {
+			lights_select.change();
+			section_lights.show();
+		}
 	});
 
 	$('#power-switch').change(function () {
@@ -328,7 +348,7 @@ $(document).ready(function () {
 					top_container.show();
 
 					$('#debug-info').html(syntax_highlight(JSON.stringify(msg, null, 4))).addClass('border border-dark rounded p-3');
-					$('#debug-enabled').change();
+					debug_enabled.change();
 
 					lights = {};
 					groups = {};
@@ -364,7 +384,19 @@ $(document).ready(function () {
 
 					lights_select.change();
 					section_lights.show();
+				})
+				.fail(function (msg) {
+					spinner_container.hide();
+					top_container.show();
+					error_alert.show();
+					section_debug.hide();
 				});
+			})
+			.fail(function (msg) {
+				spinner_container.hide();
+				top_container.show();
+				error_alert.show();
+				section_debug.hide();
 			});
 		}
 	}
