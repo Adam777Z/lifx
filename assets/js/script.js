@@ -47,13 +47,7 @@ $(document).ready(function () {
 	}
 
 	if (localStorage.getItem('debug_enabled')) {
-		var debug_enabled = localStorage.getItem('debug_enabled') == 'true';
-
-		$('#debug-enabled').prop('checked', debug_enabled);
-
-		if (debug_enabled) {
-			section_debug.show();
-		}
+		$('#debug-enabled').prop('checked', (localStorage.getItem('debug_enabled') == 'true')).change();
 	}
 
 	if (localStorage.getItem('lifx_app_duration_s')) {
@@ -88,6 +82,7 @@ $(document).ready(function () {
 		section_lights.hide();
 		section_main.hide();
 		section_offline.hide();
+		section_debug.hide();
 		get_lights();
 	});
 
@@ -332,9 +327,8 @@ $(document).ready(function () {
 					spinner_container.hide();
 					top_container.show();
 
-					if ($('#debug-enabled').prop('checked')) {
-						$('#debug-info').html(syntax_highlight(JSON.stringify(msg, null, 4))).show();
-					}
+					$('#debug-info').html(syntax_highlight(JSON.stringify(msg, null, 4))).addClass('border border-dark rounded p-3');
+					$('#debug-enabled').change();
 
 					lights = {};
 					groups = {};
