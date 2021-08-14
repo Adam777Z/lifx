@@ -17,6 +17,10 @@
     "app"
   ],
   "author": "Adam",
+  "bugs": {
+    "url": "https://github.com/Adam777Z/LIFX/issues"
+  },
+  "homepage": "https://github.com/Adam777Z/LIFX#readme",
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.54",
     "@electron-forge/maker-deb": "^6.0.0-beta.54",
