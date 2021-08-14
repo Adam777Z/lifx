@@ -9,7 +9,10 @@
     "package": "electron-forge package",
     "make": "electron-forge make"
   },
-  "repository": "https://github.com/Adam777Z/LIFX",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adam777Z/LIFX.git"
+  },
   "keywords": [
     "LIFX",
     "Electron",
