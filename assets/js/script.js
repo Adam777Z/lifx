@@ -416,27 +416,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
 					lights_select.querySelectorAll('option:not(:first-child)').forEach(e => e.remove());
 
 					for (let [key, element] of Object.entries(locations)) {
-						let new_option = document.createElement('option');
-						new_option.value = element['id'];
-						new_option.text = 'Location: ' + element['name'];
-						new_option.dataset['type'] = 'location';
-						lights_select.add(new_option);
+						let option = document.createElement('option');
+						option.value = element['id'];
+						option.text = 'Location: ' + element['name'];
+						option.dataset['type'] = 'location';
+						lights_select.add(option);
 					}
 
 					for (let [key, element] of Object.entries(groups)) {
-						let new_option = document.createElement('option');
-						new_option.value = element['id'];
-						new_option.text = 'Group: ' + element['name'];
-						new_option.dataset['type'] = 'group';
-						lights_select.add(new_option);
+						let option = document.createElement('option');
+						option.value = element['id'];
+						option.text = 'Group: ' + element['name'];
+						option.dataset['type'] = 'group';
+						lights_select.add(option);
 					}
 
 					for (let [key, element] of Object.entries(lights)) {
-						let new_option = document.createElement('option');
-						new_option.value = element['id'];
-						new_option.text = 'Light: ' + element['label'];
-						new_option.dataset['type'] = 'light';
-						lights_select.add(new_option);
+						let option = document.createElement('option');
+						option.value = element['id'];
+						option.text = 'Light: ' + element['label'];
+						option.dataset['type'] = 'light';
+						lights_select.add(option);
 					}
 
 					if (localStorage.getItem('selected')) {
