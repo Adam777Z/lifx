@@ -1,17 +1,18 @@
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', function (event) {
 	var lifx_app_token = localStorage.getItem('lifx_app_token');
-	var error_alert = $('#error-alert');
-	var token_alert = $('#token-alert');
-	var spinner_container = $('#spinner-container');
-	var top_container = $('#top-container');
-	var reload_link = $('.reload-link');
-	var section_settings = $('#section-settings');
-	var section_lights = $('#section-lights');
-	var section_main = $('#section-main');
-	var section_debug = $('#section-debug');
-	var section_offline = $('#section-offline');
-	var debug_enabled = $('#debug-enabled');
-	var lights_select = $('select[id="lights"]');
+	var error_alert = document.querySelector('#error-alert');
+	var token_alert = document.querySelector('#token-alert');
+	var spinner_container = document.querySelector('#spinner-container');
+	var top_container = document.querySelector('#top-container');
+	var reload_link = document.querySelector('#reload-link');
+	var section_settings = document.querySelector('#section-settings');
+	var section_lights = document.querySelector('#section-lights');
+	var section_main = document.querySelector('#section-main');
+	var section_debug = document.querySelector('#section-debug');
+	var section_offline = document.querySelector('#section-offline');
+	var debug_enabled = document.querySelector('#debug-enabled');
+	var back_button = document.querySelector('#back-btn');
+	var lights_select = document.querySelector('select[id="lights"]');
 	var lights = {};
 	var groups = {};
 	var locations = {};
@@ -21,16 +22,16 @@ $(document).ready(function () {
 	var duration = 0;
 
 	if (lifx_app_token) {
-		$('#lifx_app_token').val(lifx_app_token);
-		reload_link.show();
+		document.querySelector('#lifx_app_token').value = lifx_app_token;
+		reload_link.style.display = 'block';
 		get_lights();
 	} else {
-		token_alert.show();
-		reload_link.hide();
-		top_container.show();
-		section_main.hide();
-		$('#delete-token').hide();
-		$('.back-btn').hide();
+		token_alert.style.display = 'block';
+		reload_link.style.display = 'none';
+		top_container.style.display = 'block';
+		section_main.style.display = 'none';
+		document.querySelector('#delete-token').style.display = 'none';
+		back_button.style.display = 'none';
 
 		if (
 			! localStorage.getItem('debug_enabled')
@@ -47,70 +48,71 @@ $(document).ready(function () {
 			&&
 			! localStorage.getItem('lifx_app_lock')
 		) {
-			$('#delete-all-settings').hide();
+			document.querySelector('#delete-all-settings').style.display = 'none';
 		}
 	}
 
 	if (localStorage.getItem('debug_enabled')) {
-		debug_enabled.prop('checked', (localStorage.getItem('debug_enabled') == 'true')).change();
+		debug_enabled.checked = localStorage.getItem('debug_enabled') == 'true';
+		debug_enabled.dispatchEvent(new Event('change'));
 	}
 
 	if (localStorage.getItem('lifx_app_duration_s')) {
-		$('#duration-s').val(localStorage.getItem('lifx_app_duration_s'));
+		document.querySelector('#duration-s').value = localStorage.getItem('lifx_app_duration_s');
 	}
 
 	if (localStorage.getItem('lifx_app_duration_m')) {
-		$('#duration-m').val(localStorage.getItem('lifx_app_duration_m'));
+		document.querySelector('#duration-m').value = localStorage.getItem('lifx_app_duration_m');
 	}
 
 	if (localStorage.getItem('lifx_app_duration_h')) {
-		$('#duration-h').val(localStorage.getItem('lifx_app_duration_h'));
+		document.querySelector('#duration-h').value = localStorage.getItem('lifx_app_duration_h');
 	}
 
 	set_duration();
 
 	if (localStorage.getItem('lifx_app_quit')) {
-		$('#quit').prop('checked', (localStorage.getItem('lifx_app_quit') == 'true'));
+		document.querySelector('#quit').checked = localStorage.getItem('lifx_app_quit') == 'true';
 	}
 
 	if (localStorage.getItem('lifx_app_lock')) {
-		$('#lock').prop('checked', (localStorage.getItem('lifx_app_lock') == 'true'));
+		document.querySelector('#lock').checked = localStorage.getItem('lifx_app_lock') == 'true';
 	}
 
 	if (window.electron) {
-		$('.electron-only').show();
+		document.querySelectorAll('.electron-only').forEach(e => e.style.display = 'block');
 	}
 
-	reload_link.click(function (event) {
+	reload_link.addEventListener('click', function (event) {
 		event.preventDefault();
-		top_container.hide();
-		section_lights.hide();
-		section_main.hide();
-		section_offline.hide();
-		section_debug.hide();
+		top_container.style.display = 'none';
+		section_lights.style.display = 'none';
+		section_main.style.display = 'none';
+		section_offline.style.display = 'none';
+		section_debug.style.display = 'none';
 		get_lights();
 	});
 
-	$('.settings-link').click(function (event) {
+	document.querySelector('.settings-link').addEventListener('click', function (event) {
 		event.preventDefault();
 
-		if (lifx_app_token && section_settings.is(':visible')) {
-			section_settings.hide();
-			reload_link.show();
+		if (lifx_app_token && section_settings.style.display != 'none') {
+			section_settings.style.display = 'none';
+			reload_link.style.display = 'block';
 
-			if (!error_alert.is(':visible')) {
-				lights_select.change();
-				section_lights.show();
+			if (!error_alert.style.display != 'none') {
+				lights_select.dispatchEvent(new Event('change'));
+				section_lights.style.display = 'block';
 			}
 		} else {
-			section_settings.show();
-			reload_link.hide();
-			section_lights.hide();
-			section_main.hide();
-			section_offline.hide();
+			section_settings.style.display = 'block';
+			reload_link.style.display = 'none';
+			section_lights.style.display = 'none';
+			section_main.style.display = 'none';
+			section_offline.style.display = 'none';
 
 			if (lifx_app_token) {
-				$('#delete-token').show();
+				document.querySelector('#delete-token').style.display = 'block';
 			}
 
 			if (
@@ -128,128 +130,146 @@ $(document).ready(function () {
 				||
 				localStorage.getItem('lifx_app_lock')
 			) {
-				$('#delete-all-settings').show();
+				document.querySelector('#delete-all-settings').style.display = 'block';
 			}
 		}
 	});
 
-	$('#save-token').click(function () {
-		if ($('#lifx_app_token').val()) {
-			localStorage.setItem('lifx_app_token', $('#lifx_app_token').val());
+	document.querySelector('#save-token').addEventListener('click', function (event) {
+		if (document.querySelector('#lifx_app_token').value) {
+			localStorage.setItem('lifx_app_token', document.querySelector('#lifx_app_token').value);
 			lifx_app_token = localStorage.getItem('lifx_app_token');
-			error_alert.hide();
-			token_alert.hide();
-			section_settings.hide();
-			$('.back-btn').show();
-			reload_link.show();
+			error_alert.style.display = 'none';
+			token_alert.style.display = 'none';
+			section_settings.style.display = 'none';
+			back_button.style.display = 'block';
+			reload_link.style.display = 'block';
 			get_lights();
 		} else {
-			$('#delete-token').click();
+			document.querySelector('#delete-token').click();
 		}
 	});
 
-	$('#delete-token').click(function () {
+	document.querySelector('#delete-token').addEventListener('click', function (event) {
 		localStorage.removeItem('lifx_app_token');
 		lifx_app_token = localStorage.getItem('lifx_app_token');
-		$('#lifx_app_token').val(lifx_app_token);
-		error_alert.hide();
-		token_alert.show();
-		$('#delete-token').hide();
-		$('.back-btn').hide();
-		reload_link.hide();
+		document.querySelector('#lifx_app_token').value = lifx_app_token;
+		error_alert.style.display = 'none';
+		token_alert.style.display = 'block';
+		document.querySelector('#delete-token').style.display = 'none';
+		back_button.style.display = 'none';
+		reload_link.style.display = 'none';
 	});
 
-	$('#delete-all-settings').click(function () {
-		$('#delete-token').click();
+	document.querySelector('#delete-all-settings').addEventListener('click', function (event) {
+		document.querySelector('#delete-token').click();
 
 		localStorage.removeItem('debug_enabled');
-		debug_enabled.prop('checked', false);
+		debug_enabled.checked = false;
 
-		lights_select.val('all');
+		lights_select.value = 'all';
 		localStorage.removeItem('selected');
 
 		localStorage.removeItem('lifx_app_duration_s');
 		localStorage.removeItem('lifx_app_duration_m');
 		localStorage.removeItem('lifx_app_duration_h');
-		$('#duration-s').val(0);
-		$('#duration-m').val(0);
-		$('#duration-h').val(0);
+		document.querySelector('#duration-s').value = 0;
+		document.querySelector('#duration-m').value = 0;
+		document.querySelector('#duration-h').value = 0;
 
 		localStorage.removeItem('lifx_app_quit');
-		$('#quit').prop('checked', false);
+		document.querySelector('#quit').checked = false;
 
 		localStorage.removeItem('lifx_app_lock');
-		$('#lock').prop('checked', false);
+		document.querySelector('#lock').checked = false;
 
-		$('#delete-all-settings').hide();
+		document.querySelector('#delete-all-settings').style.display = 'none';
 	});
 
-	debug_enabled.change(function () {
-		if ($(this).prop('checked')) {
-			localStorage.setItem('debug_enabled', $(this).prop('checked'));
-			section_debug.show();
+	debug_enabled.addEventListener('change', function (event) {
+		if (this.checked) {
+			localStorage.setItem('debug_enabled', this.checked);
+			section_debug.style.display = 'block';
 		} else {
 			localStorage.removeItem('debug_enabled');
-			section_debug.hide();
+			section_debug.style.display = 'none';
 		}
 	});
 
-	$('.back-btn').click(function () {
-		// $('.settings-link').click();
-		section_settings.hide();
-		reload_link.show();
+	back_button.addEventListener('click', function (event) {
+		// document.querySelector('.settings-link').click();
+		section_settings.style.display = 'none';
+		reload_link.style.display = 'block';
 
-		if (lifx_app_token && !error_alert.is(':visible')) {
-			lights_select.change();
-			section_lights.show();
+		if (lifx_app_token && !error_alert.style.display != 'none') {
+			lights_select.dispatchEvent(new Event('change'));
+			section_lights.style.display = 'block';
 		}
 	});
 
-	$('#power-switch').change(function () {
+	document.querySelector('#power-switch').addEventListener('change', function (event) {
 		if (lifx_app_token) {
-			$.ajax({
-				method: 'PUT',
-				url: 'https://api.lifx.com/v1/lights/' + selector + '/state',
-				data: {
+			fetch('https://api.lifx.com/v1/lights/' + selector + '/state', {
+				'method': 'PUT',
+				'headers': {
+					'Content-Type': 'application/json',
+					'Authorization': 'Bearer ' + lifx_app_token
+				},
+				'body': JSON.stringify({
 					'power': state == 'off' ? 'on' : 'off',
 					'duration': 0
-				},
-				headers: {
-					'Authorization': 'Bearer ' + lifx_app_token
+				}),
+				'cache': 'no-store'
+			})
+			.then((response) => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw 'Error';
 				}
 			})
-			.done(function (msg) {
-				if (!jQuery.isEmptyObject(msg)) {
+			.then((data) => {
+				if (Object.keys(data).length !== 0) {
 					state = state == 'off' ? 'on' : 'off';
 					update_state();
 				} else {
 					alert('Error.');
-					$('#power-switch').prop('checked', state == 'on');
+					document.querySelector('#power-switch').checked = state == 'on';
 				}
+			})
+			.catch((error) => {
 			});
 		}
 	});
 
-	$('#fade-btn').click(function () {
+	document.querySelector('#fade-btn').addEventListener('click', function (event) {
 		if (lifx_app_token) {
-			$.ajax({
-				method: 'PUT',
-				url: 'https://api.lifx.com/v1/lights/' + selector + '/state',
-				data: {
+			fetch('https://api.lifx.com/v1/lights/' + selector + '/state', {
+				'method': 'PUT',
+				'headers': {
+					'Content-Type': 'application/json',
+					'Authorization': 'Bearer ' + lifx_app_token
+				},
+				'body': JSON.stringify({
 					'power': state == 'off' ? 'on' : 'off',
 					'duration': duration
-				},
-				headers: {
-					'Authorization': 'Bearer ' + lifx_app_token
+				}),
+				'cache': 'no-store'
+			})
+			.then((response) => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw 'Error';
 				}
 			})
-			.done(function (msg) {
-				if (!jQuery.isEmptyObject(msg)) {
-					if (window.electron && $('#lock').prop('checked')) {
+			.then((data) => {
+				if (Object.keys(data).length !== 0) {
+					if (window.electron && document.querySelector('#lock').checked) {
 						window.electron.lock();
 					}
 
-					if (window.electron && $('#quit').prop('checked')) {
+					if (window.electron && document.querySelector('#quit').checked) {
 						window.electron.quitApp();
 					} else {
 						state = state == 'off' ? 'on' : 'off';
@@ -258,103 +278,132 @@ $(document).ready(function () {
 				} else {
 					alert('Error.');
 				}
+			})
+			.catch((error) => {
 			});
 		}
 	});
 
 	function set_duration() {
-		duration = parseInt( $('#duration-s').val() ) + ( parseInt( $('#duration-m').val() ) * 60 ) + ( parseInt( $('#duration-h').val() ) * 60 * 60 );
+		duration = parseInt( document.querySelector('#duration-s').value ) + ( parseInt( document.querySelector('#duration-m').value ) * 60 ) + ( parseInt( document.querySelector('#duration-h').value ) * 60 * 60 );
 
-		localStorage.setItem('lifx_app_duration_s', $('#duration-s').val());
-		localStorage.setItem('lifx_app_duration_m', $('#duration-m').val());
-		localStorage.setItem('lifx_app_duration_h', $('#duration-h').val());
+		localStorage.setItem('lifx_app_duration_s', document.querySelector('#duration-s').value);
+		localStorage.setItem('lifx_app_duration_m', document.querySelector('#duration-m').value);
+		localStorage.setItem('lifx_app_duration_h', document.querySelector('#duration-h').value);
 	}
 
-	$('#duration-s, #duration-m, #duration-h').on('input change', function () {
-		set_duration();
-	});
+	document.querySelectorAll('#duration-s, #duration-m, #duration-h').forEach(e => ['input', 'change'].forEach(event => e.addEventListener(event, () => set_duration())));
 
-	$('#quit').change(function () {
-		if ($(this).prop('checked')) {
-			localStorage.setItem('lifx_app_quit', $(this).prop('checked'));
+	document.querySelector('#quit').addEventListener('change', function (event) {
+		if (this.checked) {
+			localStorage.setItem('lifx_app_quit', this.checked);
 		} else {
 			localStorage.removeItem('lifx_app_quit');
 		}
 	});
 
-	$('#lock').change(function () {
-		if ($(this).prop('checked')) {
-			localStorage.setItem('lifx_app_lock', $(this).prop('checked'));
+	document.querySelector('#lock').addEventListener('change', function (event) {
+		if (this.checked) {
+			localStorage.setItem('lifx_app_lock', this.checked);
 		} else {
 			localStorage.removeItem('lifx_app_lock');
 		}
 	});
 
 	function update_state() {
-		$('#power-switch').prop('checked', state == 'on');
-		$('#fade-btn').html( 'Fade ' + ( state == 'off' ? 'on' : 'off' ) );
+		document.querySelector('#power-switch').checked = state == 'on';
+		document.querySelector('#fade-btn').textContent = 'Fade ' + ( state == 'off' ? 'on' : 'off' );
 		lights[id]['power'] = state;
 	}
 
-	$('#brightness').on('input change', function () {
+	['input', 'change'].forEach(event => document.querySelector('#brightness').addEventListener(event, (event2) => {
 		if (lifx_app_token) {
-			var brightness = $(this).val();
-			$('#current-brightness').html( Math.round( brightness * 100 ) + '%' );
+			let brightness = parseFloat(event2.target.value);
+			document.querySelector('#current-brightness').textContent = Math.round( brightness * 100 ) + '%';
 		}
-	});
+	}));
 
-	$('#brightness').on('change', function () {
+	document.querySelector('#brightness').addEventListener('change', function (event) {
 		if (lifx_app_token) {
-			var brightness = $(this).val();
+			let brightness = parseFloat(this.value);
 
-			$.ajax({
-				method: 'PUT',
-				url: 'https://api.lifx.com/v1/lights/' + selector + '/state',
-				data: {
+			fetch('https://api.lifx.com/v1/lights/' + selector + '/state', {
+				'method': 'PUT',
+				'headers': {
+					'Content-Type': 'application/json',
+					'Authorization': 'Bearer ' + lifx_app_token
+				},
+				'body': JSON.stringify({
 					'power': 'on',
 					'brightness': brightness,
 					'duration': 0,
 					'fast': true
-				},
-				headers: {
-					'Authorization': 'Bearer ' + lifx_app_token
+				}),
+				'cache': 'no-store'
+			})
+			.then((response) => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw 'Error';
 				}
+			})
+			.then((data) => {
+			})
+			.catch((error) => {
 			});
 		}
 	});
 
 	function get_lights() {
 		if (lifx_app_token) {
-			spinner_container.show();
+			spinner_container.style.display = 'block';
 
-			$.ajax({
-				method: 'GET',
-				url: 'https://api.lifx.com/v1/lights/' + selector,
-				headers: {
+			fetch('https://api.lifx.com/v1/lights/' + selector, {
+				'method': 'GET',
+				'headers': {
+					'Content-Type': 'application/json',
 					'Authorization': 'Bearer ' + lifx_app_token
+				},
+				'cache': 'no-store'
+			})
+			.then((response) => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw 'Error';
 				}
 			})
-			.done(function (msg) {
+			.then((data) => {
 				// Load again to avoid incorrect power state
-				$.ajax({
-					method: 'GET',
-					url: 'https://api.lifx.com/v1/lights/' + selector,
-					headers: {
+				fetch('https://api.lifx.com/v1/lights/' + selector, {
+					'method': 'GET',
+					'headers': {
+						'Content-Type': 'application/json',
 						'Authorization': 'Bearer ' + lifx_app_token
+					},
+					'cache': 'no-store'
+				})
+				.then((response) => {
+					if (response.ok) {
+						return response.json();
+					} else {
+						throw 'Error';
 					}
 				})
-				.done(function (msg) {
-					spinner_container.hide();
-					top_container.show();
+				.then((data) => {
+					spinner_container.style.display = 'none';
+					top_container.style.display = 'block';
 
-					$('#debug-info').html(syntax_highlight(JSON.stringify(msg, null, 4))).addClass('border border-dark rounded p-3');
-					debug_enabled.change();
+					document.querySelector('#debug-info').innerHTML = syntax_highlight(JSON.stringify(data, null, 4));
+					document.querySelector('#debug-info').classList.add('border', 'border-dark', 'rounded', 'p-3');
+					debug_enabled.dispatchEvent(new Event('change'));
 
 					lights = {};
 					groups = {};
 					locations = {};
 
-					msg.forEach(function (light) {
+					data.forEach(function (light) {
 						lights[ light['id'] ] = light;
 
 						groups[ light['group']['id'] ] = light['group'];
@@ -364,49 +413,61 @@ $(document).ready(function () {
 						locations[ light['location']['id'] ]['first_light_id'] = light['id'];
 					});
 
-					lights_select.find('option').slice(1).remove();
+					lights_select.querySelectorAll('option:not(:first-child)').forEach(e => e.remove());
 
-					$.each( locations, function ( key, element ) {
-						lights_select.append('<option value="' + element['id'] + '" data-type="location">Location: ' + element['name'] + '</option>');
-					} );
-
-					$.each( groups, function ( key, element ) {
-						lights_select.append('<option value="' + element['id'] + '" data-type="group">Group: ' + element['name'] + '</option>');
-					} );
-
-					$.each( lights, function ( key, element ) {
-						lights_select.append('<option value="' + element['id'] + '" data-type="light">Light: ' + element['label'] + '</option>');
-					} );
-
-					if (localStorage.getItem('selected')) {
-						lights_select.val(localStorage.getItem('selected'));
+					for (let [key, element] of Object.entries(locations)) {
+						let new_option = document.createElement('option');
+						new_option.value = element['id'];
+						new_option.text = 'Location: ' + element['name'];
+						new_option.dataset['type'] = 'location';
+						lights_select.add(new_option);
 					}
 
-					lights_select.change();
-					section_lights.show();
+					for (let [key, element] of Object.entries(groups)) {
+						let new_option = document.createElement('option');
+						new_option.value = element['id'];
+						new_option.text = 'Group: ' + element['name'];
+						new_option.dataset['type'] = 'group';
+						lights_select.add(new_option);
+					}
+
+					for (let [key, element] of Object.entries(lights)) {
+						let new_option = document.createElement('option');
+						new_option.value = element['id'];
+						new_option.text = 'Light: ' + element['label'];
+						new_option.dataset['type'] = 'light';
+						lights_select.add(new_option);
+					}
+
+					if (localStorage.getItem('selected')) {
+						lights_select.value = localStorage.getItem('selected');
+					}
+
+					lights_select.dispatchEvent(new Event('change'));
+					section_lights.style.display = 'block';
 				})
-				.fail(function (msg) {
-					spinner_container.hide();
-					top_container.show();
-					error_alert.show();
-					section_debug.hide();
+				.catch((error) => {
+					spinner_container.style.display = 'none';
+					top_container.style.display = 'block';
+					error_alert.style.display = 'block';
+					section_debug.style.display = 'none';
 				});
 			})
-			.fail(function (msg) {
-				spinner_container.hide();
-				top_container.show();
-				error_alert.show();
-				section_debug.hide();
+			.catch((error) => {
+				spinner_container.style.display = 'none';
+				top_container.style.display = 'block';
+				error_alert.style.display = 'block';
+				section_debug.style.display = 'none';
 			});
 		}
 	}
 
-	lights_select.on('change', function () {
-		id = $(this).val();
+	lights_select.addEventListener('change', function (event) {
+		id = this.value;
 
 		localStorage.setItem('selected', id);
 
-		let type = $(this).find('option:selected').data('type');
+		let type = id != 'all' ? this.selectedOptions[0].dataset['type'] : '';
 		let new_selector = '';
 
 		if (type == 'light') {
@@ -420,7 +481,7 @@ $(document).ready(function () {
 		selector = new_selector + id;
 
 		if (id == 'all') {
-			id = $(this).find('option[data-type="light"]').first().val();
+			id = this.querySelector('option[data-type="light"]').value;
 		} else if (type == 'group') {
 			id = groups[id]['first_light_id'];
 		} else if (type == 'location') {
@@ -432,25 +493,25 @@ $(document).ready(function () {
 
 	function load(id) {
 		if (lights[id]['connected']) {
-			var brightness = lights[id]['brightness'];
-			$('#brightness').val(brightness);
-			$('#current-brightness').html( Math.round( brightness * 100 ) + '%' );
+			let brightness = lights[id]['brightness'];
+			document.querySelector('#brightness').value = brightness;
+			document.querySelector('#current-brightness').textContent = Math.round( brightness * 100 ) + '%';
 
 			state = lights[id]['power'];
-			$('#power-switch').prop('checked', state == 'on');
+			document.querySelector('#power-switch').checked = state == 'on';
 			update_state();
 
-			section_main.show();
+			section_main.style.display = 'block';
 		} else {
-			section_main.hide();
-			section_offline.show();
+			section_main.style.display = 'none';
+			section_offline.style.display = 'block';
 		}
 	}
 
 	function syntax_highlight(json) {
 		json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 		return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-			var cls = 'number';
+			let cls = 'number';
 			if (/^"/.test(match)) {
 				if (/:$/.test(match)) {
 					cls = 'key';
