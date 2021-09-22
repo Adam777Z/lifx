@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	}
 
 	if (window.electron) {
-		document.querySelectorAll('.electron-only').forEach(e => e.style.display = 'block');
+		document.querySelectorAll('.electron-only').forEach(e => e.style.display = null);
 	}
 
 	reload_link.addEventListener('click', (event) => {
