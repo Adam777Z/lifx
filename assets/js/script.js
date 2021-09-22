@@ -96,11 +96,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	document.querySelector('.settings-link').addEventListener('click', (event) => {
 		event.preventDefault();
 
-		if (lifx_app_token && section_settings.style.display != 'none') {
+		if (lifx_app_token && window.getComputedStyle(section_settings).display != 'none') {
 			section_settings.style.display = 'none';
 			reload_link.style.display = 'block';
 
-			if (!error_alert.style.display != 'none') {
+			if (window.getComputedStyle(error_alert).display == 'none') {
 				lights_select.dispatchEvent(new Event('change'));
 				section_lights.style.display = 'block';
 			}
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		section_settings.style.display = 'none';
 		reload_link.style.display = 'block';
 
-		if (lifx_app_token && !error_alert.style.display != 'none') {
+		if (lifx_app_token && window.getComputedStyle(error_alert).display == 'none') {
 			lights_select.dispatchEvent(new Event('change'));
 			section_lights.style.display = 'block';
 		}
