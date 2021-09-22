@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function (event) {
+document.addEventListener('DOMContentLoaded', (event) => {
 	var lifx_app_token = localStorage.getItem('lifx_app_token');
 	var error_alert = document.querySelector('#error-alert');
 	var token_alert = document.querySelector('#token-alert');
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 		document.querySelectorAll('.electron-only').forEach(e => e.style.display = 'block');
 	}
 
-	reload_link.addEventListener('click', function (event) {
+	reload_link.addEventListener('click', (event) => {
 		event.preventDefault();
 		top_container.style.display = 'none';
 		section_lights.style.display = 'none';
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 		get_lights();
 	});
 
-	document.querySelector('.settings-link').addEventListener('click', function (event) {
+	document.querySelector('.settings-link').addEventListener('click', (event) => {
 		event.preventDefault();
 
 		if (lifx_app_token && section_settings.style.display != 'none') {
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 		}
 	});
 
-	document.querySelector('#save-token').addEventListener('click', function (event) {
+	document.querySelector('#save-token').addEventListener('click', (event) => {
 		if (document.querySelector('#lifx_app_token').value) {
 			localStorage.setItem('lifx_app_token', document.querySelector('#lifx_app_token').value);
 			lifx_app_token = localStorage.getItem('lifx_app_token');
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 		}
 	});
 
-	document.querySelector('#delete-token').addEventListener('click', function (event) {
+	document.querySelector('#delete-token').addEventListener('click', (event) => {
 		localStorage.removeItem('lifx_app_token');
 		lifx_app_token = localStorage.getItem('lifx_app_token');
 		document.querySelector('#lifx_app_token').value = lifx_app_token;
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 		reload_link.style.display = 'none';
 	});
 
-	document.querySelector('#delete-all-settings').addEventListener('click', function (event) {
+	document.querySelector('#delete-all-settings').addEventListener('click', (event) => {
 		document.querySelector('#delete-token').click();
 
 		localStorage.removeItem('debug_enabled');
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 		document.querySelector('#delete-all-settings').style.display = 'none';
 	});
 
-	debug_enabled.addEventListener('change', function (event) {
+	debug_enabled.addEventListener('change', (event) => {
 		if (event.target.checked) {
 			localStorage.setItem('debug_enabled', event.target.checked);
 			section_debug.style.display = 'block';
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 		}
 	});
 
-	back_button.addEventListener('click', function (event) {
+	back_button.addEventListener('click', (event) => {
 		// document.querySelector('.settings-link').click();
 		section_settings.style.display = 'none';
 		reload_link.style.display = 'block';
@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 		}
 	});
 
-	document.querySelector('#power-switch').addEventListener('change', function (event) {
+	document.querySelector('#power-switch').addEventListener('change', (event) => {
 		if (lifx_app_token) {
 			fetch('https://api.lifx.com/v1/lights/' + selector + '/state', {
 				'method': 'PUT',
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 		}
 	});
 
-	document.querySelector('#fade-btn').addEventListener('click', function (event) {
+	document.querySelector('#fade-btn').addEventListener('click', (event) => {
 		if (lifx_app_token) {
 			fetch('https://api.lifx.com/v1/lights/' + selector + '/state', {
 				'method': 'PUT',
@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
 	document.querySelectorAll('#duration-s, #duration-m, #duration-h').forEach(e => ['input', 'change'].forEach(event => e.addEventListener(event, () => set_duration())));
 
-	document.querySelector('#quit').addEventListener('change', function (event) {
+	document.querySelector('#quit').addEventListener('change', (event) => {
 		if (event.target.checked) {
 			localStorage.setItem('lifx_app_quit', event.target.checked);
 		} else {
@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 		}
 	});
 
-	document.querySelector('#lock').addEventListener('change', function (event) {
+	document.querySelector('#lock').addEventListener('change', (event) => {
 		if (event.target.checked) {
 			localStorage.setItem('lifx_app_lock', event.target.checked);
 		} else {
@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 		}
 	}));
 
-	document.querySelector('#brightness').addEventListener('change', function (event) {
+	document.querySelector('#brightness').addEventListener('change', (event) => {
 		if (lifx_app_token) {
 			let brightness = parseFloat(event.target.value);
 
@@ -462,7 +462,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 		}
 	}
 
-	lights_select.addEventListener('change', function (event) {
+	lights_select.addEventListener('change', (event) => {
 		id = event.target.value;
 
 		localStorage.setItem('selected', id);
