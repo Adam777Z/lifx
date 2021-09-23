@@ -292,7 +292,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		localStorage.setItem('lifx_app_duration_h', document.querySelector('#duration-h').value);
 	}
 
-	document.querySelectorAll('#duration-s, #duration-m, #duration-h').forEach(e => ['input', 'change'].forEach(event => e.addEventListener(event, () => set_duration())));
+	document.querySelectorAll('#duration-s, #duration-m, #duration-h').forEach((e) => {
+		['input', 'change'].forEach((event) => {
+			e.addEventListener(event, (event2) => {
+				set_duration();
+			});
+		});
+	});
 
 	document.querySelector('#quit').addEventListener('change', (event) => {
 		if (event.target.checked) {
