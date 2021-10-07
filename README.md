@@ -13,9 +13,8 @@ The stored token and all settings can be deleted in the app Settings.
 - Select light(s) to control: All, Location, Group, Light
 - Turn on/off
 - Fade on/off (can set the duration)
+  - Quit and Lock after pressing the Fade button is only available in the desktop app
 - Set brightness
-
-Certain features are only available in the desktop app (Quit and Lock after pressing the Fade button).
 
 ## Download
 Download the latest version on the **Releases** page.
