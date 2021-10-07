@@ -4,13 +4,13 @@
 	"version": "1.0.0",
 	"description": "LIFX App (unofficial)",
 	"author": "Adam777",
-	"homepage": "https://github.com/Adam777Z/LIFX#readme",
+	"homepage": "https://github.com/Adam777Z/lifx#readme",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Adam777Z/LIFX.git"
+		"url": "git+https://github.com/Adam777Z/lifx.git"
 	},
 	"bugs": {
-		"url": "https://github.com/Adam777Z/LIFX/issues"
+		"url": "https://github.com/Adam777Z/lifx/issues"
 	},
 	"keywords": [
 		"LIFX",
