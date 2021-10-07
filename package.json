@@ -30,7 +30,10 @@
 		"dist": "electron-builder"
 	},
 	"build": {
-		"appId": "lifx@Adam777"
+		"appId": "lifx@Adam777",
+		"directories": {
+			"buildResources": "assets/images"
+		}
 	},
 	"postinstall": "electron-builder install-app-deps"
 }
