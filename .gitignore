@@ -1,2 +1,9 @@
-node_modules
-out
+.pnp.*
+.yarnrc.yml
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+yarn.lock
+dist

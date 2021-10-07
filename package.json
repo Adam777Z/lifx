@@ -1,66 +1,36 @@
 {
-  "name": "lifx",
-  "productName": "LIFX",
-  "version": "1.0.0",
-  "description": "LIFX Electron application",
-  "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Adam777Z/LIFX.git"
-  },
-  "keywords": [
-    "LIFX",
-    "Electron",
-    "application",
-    "app"
-  ],
-  "author": "Adam",
-  "bugs": {
-    "url": "https://github.com/Adam777Z/LIFX/issues"
-  },
-  "homepage": "https://github.com/Adam777Z/LIFX#readme",
-  "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.54",
-    "@electron-forge/maker-deb": "^6.0.0-beta.54",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.54",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
-    "@electron-forge/maker-zip": "^6.0.0-beta.54",
-    "electron": "^13.1.2"
-  },
-  "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
-  },
-  "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "lifx"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
-  }
+	"name": "lifx",
+	"productName": "LIFX",
+	"version": "1.0.0",
+	"description": "LIFX App (unofficial)",
+	"author": "Adam777",
+	"homepage": "https://github.com/Adam777Z/LIFX#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Adam777Z/LIFX.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Adam777Z/LIFX/issues"
+	},
+	"keywords": [
+		"LIFX",
+		"Electron",
+		"application",
+		"app"
+	],
+	"main": "main.js",
+	"packageManager": "yarn@3.0.2",
+	"devDependencies": {
+		"electron": "15.1.0",
+		"electron-builder": "^22.11.7"
+	},
+	"scripts": {
+		"start": "electron .",
+		"pack": "electron-builder --dir",
+		"dist": "electron-builder"
+	},
+	"build": {
+		"appId": "lifx@Adam777"
+	},
+	"postinstall": "electron-builder install-app-deps"
 }
