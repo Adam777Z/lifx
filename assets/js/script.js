@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	});
 
 	back_button.addEventListener('click', (event) => {
-		// document.querySelectorAll('.settings-link').forEach(e => e.click());
+		// document.querySelector('.settings-link').click();
 
 		section_settings.style.display = 'none';
 		github_link.style.display = 'none';
