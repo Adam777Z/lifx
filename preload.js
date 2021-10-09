@@ -22,9 +22,6 @@ const {
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld(
-	// 'quitApp', function() {
-	// 	ipcRenderer.send('quitApp');
-	// },
 	'electron',
 	{
 		'quitApp': () => ipcRenderer.send('quitApp'),

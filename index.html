@@ -5,8 +5,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; connect-src https://api.lifx.com;">
-	<meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; connect-src https://api.lifx.com;">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; connect-src 'self' https://api.lifx.com;">
+	<meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; connect-src 'self' https://api.lifx.com;">
 	<title>LIFX</title>
 	<link rel="icon" type="image/png" href="./assets/images/icon.png">
 	<link rel="stylesheet" href="./assets/css/bootstrap.min.css">
@@ -23,7 +23,11 @@
 			</div>
 			<div id="top-container" class="col" style="display: none;">
 				<div class="d-flex justify-content-end align-items-center">
-					<a id="github-link" class="me-3" href="https://github.com/Adam777Z/lifx" target="_blank" rel="noopener noreferrer" title="View on GitHub" style="display: none;"><i class="bi bi-github fs-2"></i></a>
+					<div id="settings-only" style="display: none;">
+						<span class="me-3 align-middle">v<span id="app-version"></span></span>
+						<a class="me-3" href="https://github.com/Adam777Z/lifx" target="_blank" rel="noopener noreferrer" title="View on GitHub"><i class="bi bi-github fs-2"></i></a>
+					</div>
+
 					<a id="reload-link" class="me-3" href="#" style="display: none;"><i class="bi bi-arrow-clockwise fs-2"></i></a>
 					<a class="settings-link" href="#"><i class="bi bi-gear-fill fs-2"></i></a>
 				</div>

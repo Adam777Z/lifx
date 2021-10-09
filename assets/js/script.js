@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	var token_alert = document.querySelector('#token-alert');
 	var spinner_container = document.querySelector('#spinner-container');
 	var top_container = document.querySelector('#top-container');
-	var github_link = document.querySelector('#github-link');
+	var settings_only = document.querySelector('#settings-only');
 	var reload_link = document.querySelector('#reload-link');
 	var section_settings = document.querySelector('#section-settings');
 	var section_lights = document.querySelector('#section-lights');
@@ -81,6 +81,32 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		document.querySelector('#lock').checked = localStorage.getItem('lifx_app_lock') == 'true';
 	}
 
+	function get_version() {
+		fetch('package.json', {
+			'method': 'GET',
+			'headers': {
+				'Content-Type': 'application/json',
+			},
+			'cache': 'no-store'
+		})
+		.then((response) => {
+			if (response.ok) {
+				return response.json();
+			} else {
+				throw 'Error';
+			}
+		})
+		.then((data) => {
+			if (data['version']) {
+				document.querySelector('#app-version').textContent = data['version'];
+			}
+		})
+		.catch((error) => {
+		});
+	}
+
+	get_version();
+
 	if (window.electron) {
 		document.querySelectorAll('.electron-only').forEach(e => e.style.display = null);
 	}
@@ -100,7 +126,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 		if (lifx_app_token && window.getComputedStyle(section_settings).display != 'none') {
 			section_settings.style.display = 'none';
-			github_link.style.display = 'none';
+			settings_only.style.display = 'none';
 			reload_link.style.display = 'block';
 
 			if (window.getComputedStyle(error_alert).display == 'none') {
@@ -109,7 +135,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 			}
 		} else {
 			section_settings.style.display = 'block';
-			github_link.style.display = 'block';
+			settings_only.style.display = 'block';
 			reload_link.style.display = 'none';
 			section_lights.style.display = 'none';
 			section_main.style.display = 'none';
@@ -150,7 +176,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 			error_alert.style.display = 'none';
 			token_alert.style.display = 'none';
 			section_settings.style.display = 'none';
-			github_link.style.display = 'none';
+			settings_only.style.display = 'none';
 			reload_link.style.display = 'block';
 			get_lights();
 		} else {
@@ -208,7 +234,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		// document.querySelector('.settings-link').click();
 
 		section_settings.style.display = 'none';
-		github_link.style.display = 'none';
+		settings_only.style.display = 'none';
 		reload_link.style.display = 'block';
 
 		if (lifx_app_token && window.getComputedStyle(error_alert).display == 'none') {
