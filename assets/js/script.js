@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		})
 		.then((data) => {
 			if (data['version']) {
-				document.querySelector('#app-version').textContent = data['version'];
+				document.querySelector('#app-version').textContent = 'v' + data['version'];
 			}
 		})
 		.catch((error) => {
