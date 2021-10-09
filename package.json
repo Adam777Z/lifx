@@ -19,9 +19,8 @@
 		"app"
 	],
 	"main": "main.js",
-	"packageManager": "yarn@3.0.2",
 	"devDependencies": {
-		"electron": "15.1.2",
+		"electron": "^15.1.2",
 		"electron-builder": "^22.13.1"
 	},
 	"scripts": {

@@ -20,8 +20,8 @@ The stored token and all settings can be deleted in the app Settings.
 Download the latest version on the **Releases** page.
 
 ## How to build
-1. yarn install
-2. yarn dist
+1. npm install
+2. npm run dist
 
 ## Credits
 - Thanks to [LIFX](https://www.lifx.com/) for the lights and the [LIFX HTTP API](https://api.developer.lifx.com/)
