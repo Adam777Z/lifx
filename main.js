@@ -3,7 +3,8 @@
 const {
 	app,
 	BrowserWindow,
-	ipcMain
+	ipcMain,
+	shell
 } = require('electron');
 const path = require('path');
 
@@ -16,6 +17,11 @@ function createWindow() {
 		webPreferences: {
 			preload: path.join(__dirname, 'preload.js')
 		}
+	});
+
+	mainWindow.webContents.setWindowOpenHandler((details) => {
+		shell.openExternal(details['url']);
+		return { action: 'deny' };
 	});
 
 	// and load the index.html of the app.
