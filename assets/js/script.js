@@ -71,8 +71,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		document.querySelector('#duration-h').value = localStorage.getItem('lifx_app_duration_h');
 	}
 
-	set_duration();
-
 	if (localStorage.getItem('lifx_app_quit')) {
 		document.querySelector('#quit').checked = localStorage.getItem('lifx_app_quit') == 'true';
 	}
