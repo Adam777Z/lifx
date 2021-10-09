@@ -36,9 +36,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		back_button.style.display = 'none';
 
 		if (
-			! localStorage.getItem('debug_enabled')
+			! localStorage.getItem('lifx_app_debug_enabled')
 			&&
-			! localStorage.getItem('selected')
+			! localStorage.getItem('lifx_app_selected')
 			&&
 			! localStorage.getItem('lifx_app_duration_s')
 			&&
@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		}
 	}
 
-	if (localStorage.getItem('debug_enabled')) {
-		debug_enabled.checked = localStorage.getItem('debug_enabled') == 'true';
+	if (localStorage.getItem('lifx_app_debug_enabled')) {
+		debug_enabled.checked = localStorage.getItem('lifx_app_debug_enabled') == 'true';
 		debug_enabled.dispatchEvent(new Event('change'));
 	}
 
@@ -148,9 +148,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 			}
 
 			if (
-				localStorage.getItem('debug_enabled')
+				localStorage.getItem('lifx_app_debug_enabled')
 				||
-				localStorage.getItem('selected')
+				localStorage.getItem('lifx_app_selected')
 				||
 				localStorage.getItem('lifx_app_duration_s')
 				||
@@ -196,11 +196,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	delete_all_settings_btn.addEventListener('click', (event) => {
 		delete_token_btn.click();
 
-		localStorage.removeItem('debug_enabled');
+		localStorage.removeItem('lifx_app_debug_enabled');
 		debug_enabled.checked = false;
 
+		localStorage.removeItem('lifx_app_selected');
 		lights_select.value = 'all';
-		localStorage.removeItem('selected');
 
 		localStorage.removeItem('lifx_app_duration_s');
 		localStorage.removeItem('lifx_app_duration_m');
@@ -220,10 +220,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 	debug_enabled.addEventListener('change', (event) => {
 		if (event.target.checked) {
-			localStorage.setItem('debug_enabled', event.target.checked);
+			localStorage.setItem('lifx_app_debug_enabled', event.target.checked);
 			section_debug.style.display = 'block';
 		} else {
-			localStorage.removeItem('debug_enabled');
+			localStorage.removeItem('lifx_app_debug_enabled');
 			section_debug.style.display = 'none';
 		}
 	});
@@ -479,8 +479,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 						lights_select.add(option);
 					}
 
-					if (localStorage.getItem('selected')) {
-						lights_select.value = localStorage.getItem('selected');
+					if (localStorage.getItem('lifx_app_selected')) {
+						lights_select.value = localStorage.getItem('lifx_app_selected');
 					}
 
 					lights_select.dispatchEvent(new Event('change'));
@@ -505,7 +505,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	lights_select.addEventListener('change', (event) => {
 		id = event.target.value;
 
-		localStorage.setItem('selected', id);
+		localStorage.setItem('lifx_app_selected', id);
 
 		let type = id != 'all' ? event.target.selectedOptions[0].dataset['type'] : '';
 		let new_selector = '';
