@@ -1,7 +1,7 @@
 # LIFX App (unofficial)
 
 A simple app to control LIFX lights over the Internet.\
-Available as a desktop app (built using Electron) on multiple platforms and on the web.
+Available on multiple platforms as a desktop app (built using Electron) and on the web.
 
 Requires your LIFX personal access token, get it [here](https://cloud.lifx.com/).
 
