@@ -19,6 +19,10 @@ The stored token and all settings can be deleted in the app Settings.
 ## Download
 Download the latest version on the **Releases** page.
 
+## Portable mode
+Supports storing the app data in the `data` folder next to the executable file.\
+To enable, create the `data` folder where the executable file is located.
+
 ## How to build
 1. npm install
 2. npm run dist

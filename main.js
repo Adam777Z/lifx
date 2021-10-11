@@ -6,7 +6,13 @@ const {
 	ipcMain,
 	shell
 } = require('electron');
+const fs = require('fs');
 const path = require('path');
+const data_path = path.join(path.dirname(app.getPath('exe')), 'data');
+
+if (fs.existsSync(data_path)) {
+	app.setPath('userData', data_path);
+}
 
 function createWindow() {
 	// Create the browser window.
