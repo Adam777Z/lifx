@@ -278,6 +278,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 	document.querySelector('#fade-btn').addEventListener('click', (event) => {
 		if (lifx_app_token) {
+			set_duration();
+
 			fetch('https://api.lifx.com/v1/lights/' + selector + '/state', {
 				'method': 'PUT',
 				'headers': {
