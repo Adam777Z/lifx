@@ -13,13 +13,16 @@ The stored token and all settings can be deleted in the app Settings.
 - Select light(s) to control: All, Location, Group, Light
 - Turn on/off
 - Fade on/off (can set the duration)
-  - Only available in the desktop app: Quit and Lock after pressing the Fade button
+  - Only available in the desktop app: Quit and Lock (Windows only) after pressing the Fade button
 - Set brightness
 
 ## Download
 Download the latest version on the **Releases** page.
 
-## Portable mode
+## App data location
+[See here](https://www.electronjs.org/docs/latest/api/app/#appgetpathname).
+
+#### Portable mode (Windows only)
 Supports storing the app data in the `data` folder next to the executable file.\
 To enable, create the `data` folder where the executable file is located.
 

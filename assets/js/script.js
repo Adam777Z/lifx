@@ -107,6 +107,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 	if (window.electron) {
 		document.querySelectorAll('.electron-only').forEach(e => e.style.display = null);
+
+		if (window.electron.platform === 'win32') {
+			document.querySelectorAll('.electron-windows-only').forEach(e => e.style.display = null);
+		}
 	}
 
 	reload_link.addEventListener('click', (event) => {

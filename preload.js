@@ -24,6 +24,7 @@ const {
 contextBridge.exposeInMainWorld(
 	'electron',
 	{
+		'platform': process.platform,
 		'quitApp': () => ipcRenderer.send('quitApp'),
 		'lock': () => ipcRenderer.send('lock')
 	}

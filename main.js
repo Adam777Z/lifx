@@ -6,12 +6,15 @@ const {
 	ipcMain,
 	shell
 } = require('electron');
-const fs = require('fs');
 const path = require('path');
-const data_path = path.join(path.dirname(app.getPath('exe')), 'data');
 
-if (fs.existsSync(data_path)) {
-	app.setPath('userData', data_path);
+if (process.platform === 'win32') {
+	const fs = require('fs');
+	const data_path = path.join(path.dirname(app.getPath('exe')), 'data');
+
+	if (fs.existsSync(data_path)) {
+		app.setPath('userData', data_path);
+	}
 }
 
 function createWindow() {
@@ -69,5 +72,7 @@ ipcMain.on('quitApp', () => {
 });
 
 ipcMain.on('lock', () => {
-	require('child_process').exec('rundll32.exe user32.dll, LockWorkStation');
+	if (process.platform === 'win32') {
+		require('child_process').exec('rundll32.exe user32.dll, LockWorkStation');
+	}
 });
