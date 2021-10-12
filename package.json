@@ -32,6 +32,12 @@
 		"appId": "lifx@Adam777",
 		"directories": {
 			"buildResources": "assets/images"
+		},
+		"nsis": {
+			"oneClick": false,
+			"perMachine": false,
+			"allowElevation": true,
+			"allowToChangeInstallationDirectory": true
 		}
 	},
 	"postinstall": "electron-builder install-app-deps"
