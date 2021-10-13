@@ -29,7 +29,7 @@
 		"dist": "electron-builder"
 	},
 	"build": {
-		"appId": "lifx@Adam777",
+		"appId": "adam777.lifx",
 		"directories": {
 			"buildResources": "assets/images"
 		},
