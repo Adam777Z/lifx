@@ -9,6 +9,7 @@ const {
 const path = require('path');
 let mainWindow = null;
 
+// Portable mode (Windows only)
 if (process.platform === 'win32') {
 	const fs = require('fs');
 	const data_path = path.join(path.dirname(app.getPath('exe')), 'data');
