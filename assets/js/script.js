@@ -438,6 +438,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 					}
 				})
 				.then((data) => {
+					error_alert.style.display = 'none';
 					spinner_container.style.display = 'none';
 					top_container.style.display = 'block';
 
