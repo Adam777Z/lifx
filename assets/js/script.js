@@ -494,16 +494,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
 					section_lights.style.display = 'block';
 				})
 				.catch((error) => {
+					error_alert.style.display = 'block';
 					spinner_container.style.display = 'none';
 					top_container.style.display = 'block';
-					error_alert.style.display = 'block';
 					section_debug.style.display = 'none';
 				});
 			})
 			.catch((error) => {
+				error_alert.style.display = 'block';
 				spinner_container.style.display = 'none';
 				top_container.style.display = 'block';
-				error_alert.style.display = 'block';
 				section_debug.style.display = 'none';
 			});
 		}
