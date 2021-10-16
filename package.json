@@ -33,11 +33,13 @@
 		"directories": {
 			"buildResources": "assets/images"
 		},
+		"artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
 		"nsis": {
 			"oneClick": false,
 			"perMachine": false,
 			"allowElevation": true,
-			"allowToChangeInstallationDirectory": true
+			"allowToChangeInstallationDirectory": true,
+			"artifactName": "${productName} Setup ${version} ${arch}.${ext}"
 		}
 	},
 	"postinstall": "electron-builder install-app-deps"
