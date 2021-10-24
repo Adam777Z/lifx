@@ -25,6 +25,13 @@ The stored token and all settings can be deleted in the app Settings.
 Can be installed (only available in [supported web browsers](https://caniuse.com/web-app-manifest)).
 
 ## Desktop app
+### Screenshots (Windows 10)
+![Screenshot of Main](screenshots/desktop-app-main-windows-10.png)\
+Main
+
+![Screenshot of Settings](screenshots/desktop-app-settings-windows-10.png)\
+Settings
+
 ### Download
 Download the latest version on the [Releases](https://github.com/Adam777Z/lifx/releases/latest) page.
 
