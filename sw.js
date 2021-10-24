@@ -6,7 +6,7 @@ self.addEventListener('install', (event) => {
 			'/lifx/',
 			'/lifx/index.html',
 			'/lifx/package.json',
-			'/lifx/manifest.webmanifest',
+			'/lifx/manifest.json',
 			'/lifx/assets/images/icon.png',
 			'/lifx/assets/images/icon-192x192.png',
 			'/lifx/assets/css/bootstrap.min.css',
