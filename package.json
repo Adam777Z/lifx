@@ -18,6 +18,7 @@
 		"application",
 		"app"
 	],
+	"license": "MIT-0",
 	"main": "main.js",
 	"devDependencies": {
 		"electron": "^15.1.2",
