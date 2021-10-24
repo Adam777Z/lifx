@@ -4,7 +4,6 @@ self.addEventListener('install', (event) => {
 	event.waitUntil((() => {
 		caches.open(cacheName).then((cache) => cache.addAll([
 			'/lifx/',
-			'/lifx/index.html',
 			'/lifx/package.json',
 			'/lifx/manifest.json',
 			'/lifx/assets/images/icon.png',
@@ -20,8 +19,5 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-	event.respondWith((async () => {
-		let response = await caches.match(event.request);
-		return response ? response : await fetch(event.request);
-	})());
+	event.respondWith(caches.match(event.request).then((response) => response || fetch(event.request)));
 });
