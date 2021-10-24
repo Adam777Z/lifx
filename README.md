@@ -2,7 +2,9 @@
 
 A simple app to control LIFX lights over the Internet.
 
-Available on multiple platforms on the web as a Progressive Web App (PWA) that can be installed and as a desktop app (built using Electron).
+Available on multiple platforms:
+- on the web as a Progressive Web App (PWA) that can be installed
+- desktop app (built using Electron)
 
 Requires your LIFX personal access token, get it [here](https://cloud.lifx.com/).
 
@@ -22,10 +24,11 @@ The stored token and all settings can be deleted in the app Settings.
 
 Can be installed (only available in [supported web browsers](https://caniuse.com/web-app-manifest)).
 
-## Download (desktop app)
+## Desktop app
+### Download
 Download the latest version on the [Releases](https://github.com/Adam777Z/lifx/releases/latest) page.
 
-## Desktop app data location
+### App data location
 [See here](https://www.electronjs.org/docs/latest/api/app/#appgetpathname).
 
 #### Portable mode (Windows only)
@@ -33,7 +36,7 @@ Supports storing the app data in the `data` folder next to the executable file.\
 To enable, create the `data` folder where the executable file is located.\
 The `data` folder already exists in the Portable version ZIP file.
 
-## How to build the desktop app
+### How to build
 1. npm install
 2. npm run dist
 
