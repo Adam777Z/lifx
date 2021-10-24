@@ -22,12 +22,6 @@ self.addEventListener('install', (event) => {
 self.addEventListener('fetch', (event) => {
 	event.respondWith((async () => {
 		let response = await caches.match(event.request);
-
-		if (!response) {
-			response = await fetch(event.request);
-			// caches.open(cacheName).then((cache) => cache.put(event.request, response.clone()));
-		}
-
-		return response;
+		return response ? response : await fetch(event.request);
 	})());
 });

@@ -25,7 +25,7 @@ Download the latest version on the [Releases](https://github.com/Adam777Z/lifx/r
 #### Portable mode (Windows only)
 Supports storing the app data in the `data` folder next to the executable file.\
 To enable, create the `data` folder where the executable file is located.\
-The Portable version ZIP file already has the `data` folder.
+The `data` folder already exists in the Portable version ZIP file.
 
 ## How to build
 1. npm install
