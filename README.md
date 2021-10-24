@@ -2,7 +2,7 @@
 
 A simple app to control LIFX lights over the Internet.
 
-Available on multiple platforms as a desktop app (built using Electron) and on the web as a Progressive Web App (PWA) that can be installed.
+Available on multiple platforms on the web as a Progressive Web App (PWA) that can be installed and as a desktop app (built using Electron).
 
 Requires your LIFX personal access token, get it [here](https://cloud.lifx.com/).
 
@@ -18,8 +18,9 @@ The stored token and all settings can be deleted in the app Settings.
 - Set brightness
 
 ## Progressive Web App (PWA)
-Can be installed (only available in [supported web browsers](https://caniuse.com/web-app-manifest)).
 #### [LIFX Progressive Web App (unofficial)](https://adam777z.github.io/lifx/)
+
+Can be installed (only available in [supported web browsers](https://caniuse.com/web-app-manifest)).
 
 ## Download (desktop app)
 Download the latest version on the [Releases](https://github.com/Adam777Z/lifx/releases/latest) page.
