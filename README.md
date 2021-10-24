@@ -3,8 +3,8 @@
 A simple app to control LIFX lights over the Internet.
 
 Available on multiple platforms:
-- on the web as a Progressive Web App (PWA) that can be installed
-- desktop app (built using Electron)
+- On the web as a Progressive Web App (PWA) that can be installed
+- Desktop app (built using Electron)
 
 Requires your LIFX personal access token, get it [here](https://cloud.lifx.com/).
 
@@ -39,6 +39,9 @@ The `data` folder already exists in the Portable version ZIP file.
 ### How to build
 1. npm install
 2. npm run dist
+
+## Support and Feedback
+Available under [Discussions](https://github.com/Adam777Z/lifx/discussions).
 
 ## Credits
 - Thanks to [LIFX](https://www.lifx.com/) for the lights and the [LIFX HTTP API](https://api.developer.lifx.com/)
