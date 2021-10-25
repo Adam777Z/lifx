@@ -9,7 +9,7 @@ self.addEventListener('install', (event) => {
 			'/lifx/assets/images/icon-192x192.png',
 			'/lifx/assets/images/icon-512x512.png',
 			'/lifx/assets/css/bootstrap.min.css',
-			'/lifx/assets/css/bootstrap-icons.css',
+			'/lifx/assets/css/bootstrap-icons.min.css',
 			'/lifx/assets/css/fonts/bootstrap-icons.woff2',
 			'/lifx/assets/css/style.min.css',
 			'/lifx/assets/js/bootstrap.bundle.min.js',
