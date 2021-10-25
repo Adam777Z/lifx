@@ -1,4 +1,4 @@
-const cacheName = 'lifx-store';
+const cacheName = 'lifx-cache';
 
 self.addEventListener('install', (event) => {
 	event.waitUntil((() => {
