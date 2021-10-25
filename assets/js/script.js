@@ -4,10 +4,10 @@ if ('serviceWorker' in navigator) {
 
 document.addEventListener('DOMContentLoaded', (event) => {
 	var lifx_app_token = localStorage.getItem('lifx_app_token');
+	var top_container = document.querySelector('#top-container');
 	var error_alert = document.querySelector('#error-alert');
 	var token_alert = document.querySelector('#token-alert');
 	var spinner_container = document.querySelector('#spinner-container');
-	var top_container = document.querySelector('#top-container');
 	var settings_only = document.querySelector('#settings-only');
 	var reload_link = document.querySelector('#reload-link');
 	var section_settings = document.querySelector('#section-settings');
@@ -119,11 +119,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 	reload_link.addEventListener('click', (event) => {
 		event.preventDefault();
-		top_container.style.display = 'none';
-		section_lights.style.display = 'none';
-		section_main.style.display = 'none';
-		section_offline.style.display = 'none';
-		section_debug.style.display = 'none';
 		get_lights();
 	});
 
@@ -407,7 +402,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 	function get_lights() {
 		if (lifx_app_token) {
+			top_container.style.display = 'none';
+			error_alert.style.display = 'none';
 			spinner_container.style.display = 'block';
+			section_lights.style.display = 'none';
+			section_main.style.display = 'none';
+			section_offline.style.display = 'none';
+			section_debug.style.display = 'none';
 
 			fetch('https://api.lifx.com/v1/lights/' + selector, {
 				'method': 'GET',
@@ -442,9 +443,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 					}
 				})
 				.then((data) => {
-					error_alert.style.display = 'none';
-					spinner_container.style.display = 'none';
 					top_container.style.display = 'block';
+					spinner_container.style.display = 'none';
 
 					document.querySelector('#debug-info').innerHTML = syntax_highlight(JSON.stringify(data, null, 4));
 					document.querySelector('#debug-info').classList.add('border', 'border-dark', 'rounded', 'p-3');
@@ -498,17 +498,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
 					section_lights.style.display = 'block';
 				})
 				.catch((error) => {
+					top_container.style.display = 'block';
 					error_alert.style.display = 'block';
 					spinner_container.style.display = 'none';
-					top_container.style.display = 'block';
-					section_debug.style.display = 'none';
 				});
 			})
 			.catch((error) => {
+				top_container.style.display = 'block';
 				error_alert.style.display = 'block';
 				spinner_container.style.display = 'none';
-				top_container.style.display = 'block';
-				section_debug.style.display = 'none';
 			});
 		}
 	}
