@@ -3,7 +3,6 @@ const cacheVersion = '1.0.0'; // Needed for service worker auto updates
 
 self.addEventListener('install', (event) => {
 	event.waitUntil(
-		// Delete the old cache if it exists and then cache all files of the app
 		caches.delete(cacheName).then((deleted) => {
 			caches.open(cacheName).then((cache) => cache.addAll([
 				'/lifx/',

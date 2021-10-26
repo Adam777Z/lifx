@@ -125,12 +125,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	document.querySelectorAll('.settings-link').forEach(e => e.addEventListener('click', (event) => {
 		event.preventDefault();
 
-		if (lifx_app_token && window.getComputedStyle(section_settings).display != 'none') {
+		if (window.getComputedStyle(section_settings).display != 'none') {
 			section_settings.style.display = 'none';
 			settings_only.style.display = 'none';
-			reload_link.style.display = 'block';
 
-			if (window.getComputedStyle(error_alert).display == 'none') {
+			if (window.getComputedStyle(error_alert).display == 'none' && window.getComputedStyle(token_alert).display == 'none') {
+				reload_link.style.display = 'block';
+
 				lights_select.dispatchEvent(new Event('change'));
 				section_lights.style.display = 'block';
 			}
