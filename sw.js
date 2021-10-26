@@ -2,9 +2,10 @@ const cacheName = 'lifx-cache';
 const cacheVersion = '1.0.0'; // Needed for service worker auto updates
 
 self.addEventListener('install', (event) => {
-	event.waitUntil((() => {
-		caches.delete(cacheName).then((deleted) => { // Delete all old files in the cache first
-			caches.open(cacheName).then((cache) => cache.addAll([ // Cache all files of the app
+	event.waitUntil(
+		// Delete the old cache if it exists and then cache all files of the app
+		caches.delete(cacheName).then((deleted) => {
+			caches.open(cacheName).then((cache) => cache.addAll([
 				'/lifx/',
 				'/lifx/package.json',
 				'/lifx/manifest.json',
@@ -17,25 +18,10 @@ self.addEventListener('install', (event) => {
 				'/lifx/assets/js/bootstrap.bundle.min.js',
 				'/lifx/assets/js/script.min.js',
 			]));
-		});
-	})());
+		})
+	);
 });
 
 self.addEventListener('fetch', (event) => {
 	event.respondWith(caches.open(cacheName).then((cache) => cache.match(event.request).then((response) => response || fetch(event.request))));
 });
-
-// function check_version() {
-// 	fetch('package.json')
-// 	.then((response) => response.ok ? response.json() : {})
-// 	.then(async (data) => {
-// 		let cachedData = await caches.open(cacheName).then((cache) => cache.match('package.json').then((response) => response.ok ? response.json() : {}));
-// 		let cachedVersion = cachedData['version'];
-// 		let version = data['version'];
-
-// 		// Update files in the cache if version is not the same
-// 		if (cachedVersion != version) {
-// 			cache_files();
-// 		}
-// 	});
-// }
