@@ -83,32 +83,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		document.querySelector('#lock').checked = localStorage.getItem('lifx_app_lock') == 'true';
 	}
 
-	function get_version() {
-		fetch('package.json', {
-			'method': 'GET',
-			'headers': {
-				'Content-Type': 'application/json',
-			},
-			'cache': 'no-store'
-		})
-		.then((response) => {
-			if (response.ok) {
-				return response.json();
-			} else {
-				throw 'Error';
-			}
-		})
-		.then((data) => {
-			if (data['version']) {
-				document.querySelector('#app-version').textContent = 'v' + data['version'];
-			}
-		})
-		.catch((error) => {
-		});
-	}
-
-	get_version();
-
 	if (window.electron) {
 		document.querySelectorAll('.electron-only').forEach(e => e.style.display = null);
 
