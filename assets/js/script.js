@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 			section_settings.style.display = 'none';
 			settings_only.style.display = 'none';
 
-			if (window.getComputedStyle(error_alert).display == 'none' && window.getComputedStyle(token_alert).display == 'none') {
+			if (lifx_app_token && window.getComputedStyle(error_alert).display == 'none') {
 				reload_link.style.display = 'block';
 
 				lights_select.dispatchEvent(new Event('change'));
