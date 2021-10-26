@@ -1,7 +1,7 @@
 const cacheName = 'lifx-cache';
 
 self.addEventListener('install', (event) => {
-	event.waitUntil((() => {
+	event.waitUntil(
 		caches.open(cacheName).then((cache) => cache.addAll([
 			'/lifx/',
 			'/lifx/package.json',
@@ -14,8 +14,8 @@ self.addEventListener('install', (event) => {
 			'/lifx/assets/css/style.min.css',
 			'/lifx/assets/js/bootstrap.bundle.min.js',
 			'/lifx/assets/js/script.min.js',
-		]));
-	})());
+		]))
+	);
 });
 
 self.addEventListener('fetch', (event) => {
