@@ -1,4 +1,4 @@
-if ('serviceWorker' in navigator) {
+if (!window.electron && 'serviceWorker' in navigator) {
 	navigator.serviceWorker.register('sw.js');
 };
 
