@@ -1,6 +1,6 @@
 if (!window.electron && 'serviceWorker' in navigator) {
 	navigator.serviceWorker.register('sw.js');
-};
+}
 
 document.addEventListener('DOMContentLoaded', (event) => {
 	var lifx_app_token = localStorage.getItem('lifx_app_token');
