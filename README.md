@@ -16,7 +16,7 @@ The stored token and all settings can be deleted in the app Settings.
 - Select light(s) to control: All, Location, Group, Light
 - Turn on/off
 - Fade on/off (can set the duration)
-  - Only available in the desktop app: Quit and Lock (Windows only) after pressing the Fade button
+  - Only available in the desktop app: Quit, Lock (Windows only), Sleep (Windows only) after pressing the Fade button
 - Set brightness
 
 ## Progressive Web App (PWA)
@@ -44,8 +44,11 @@ To enable, create the `data` folder where the executable file is located.\
 The `data` folder already exists in the Portable version ZIP file.
 
 ### How to build
-1. npm install
-2. npm run dist
+1. Have [NirCmd](https://www.nirsoft.net/utils/nircmd.html) in the resources folder:\
+resources\nircmdc.exe\
+(Windows only)
+2. npm install
+3. npm run dist
 
 ## Support and Feedback
 Available under [Discussions](https://github.com/Adam777Z/lifx/discussions).
@@ -55,3 +58,4 @@ Available under [Discussions](https://github.com/Adam777Z/lifx/discussions).
 - [Electron](https://www.electronjs.org/) (desktop app)
 - [Bootstrap](https://getbootstrap.com/)
 - [Bootstrap Icons](https://icons.getbootstrap.com/)
+- [NirCmd](https://www.nirsoft.net/utils/nircmd.html) (used for Sleep, Windows only)

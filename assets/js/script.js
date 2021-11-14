@@ -53,6 +53,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 			! localStorage.getItem('lifx_app_quit')
 			&&
 			! localStorage.getItem('lifx_app_lock')
+			&&
+			! localStorage.getItem('lifx_app_sleep')
 		) {
 			delete_all_settings_btn.style.display = 'none';
 		}
@@ -81,6 +83,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 	if (localStorage.getItem('lifx_app_lock')) {
 		document.querySelector('#lock').checked = localStorage.getItem('lifx_app_lock') == 'true';
+	}
+
+	if (localStorage.getItem('lifx_app_sleep')) {
+		document.querySelector('#sleep').checked = localStorage.getItem('lifx_app_sleep') == 'true';
 	}
 
 	if (window.electron) {
@@ -139,6 +145,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 				localStorage.getItem('lifx_app_quit')
 				||
 				localStorage.getItem('lifx_app_lock')
+				||
+				localStorage.getItem('lifx_app_sleep')
 			) {
 				delete_all_settings_btn.style.display = 'block';
 			}
@@ -192,6 +200,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 		localStorage.removeItem('lifx_app_lock');
 		document.querySelector('#lock').checked = false;
+
+		localStorage.removeItem('lifx_app_sleep');
+		document.querySelector('#sleep').checked = false;
 
 		delete_all_settings_btn.style.display = 'none';
 	});
@@ -283,6 +294,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 						window.electron.lock();
 					}
 
+					if (window.electron && document.querySelector('#sleep').checked) {
+						window.electron.sleep();
+					}
+
 					if (window.electron && document.querySelector('#quit').checked) {
 						window.electron.quitApp();
 					} else {
@@ -327,6 +342,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
 			localStorage.setItem('lifx_app_lock', event.target.checked);
 		} else {
 			localStorage.removeItem('lifx_app_lock');
+		}
+	});
+
+	document.querySelector('#sleep').addEventListener('change', (event) => {
+		if (event.target.checked) {
+			localStorage.setItem('lifx_app_sleep', event.target.checked);
+		} else {
+			localStorage.removeItem('lifx_app_sleep');
 		}
 	});
 

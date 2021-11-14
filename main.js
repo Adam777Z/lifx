@@ -96,3 +96,9 @@ ipcMain.on('lock', () => {
 		require('child_process').exec('rundll32.exe user32.dll, LockWorkStation');
 	}
 });
+
+ipcMain.on('sleep', () => {
+	if (process.platform === 'win32') {
+		require('child_process').execFile('resources/nircmdc.exe', ['standby']);
+	}
+});

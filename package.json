@@ -1,7 +1,7 @@
 {
 	"name": "lifx",
 	"productName": "LIFX",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"description": "LIFX App (unofficial)",
 	"author": "Adam777",
 	"homepage": "https://github.com/Adam777Z/lifx#readme",
@@ -21,7 +21,7 @@
 	"license": "MIT-0",
 	"main": "main.js",
 	"devDependencies": {
-		"electron": "^15.1.2",
+		"electron": "^15.3.1",
 		"electron-builder": "^22.13.1"
 	},
 	"scripts": {
@@ -35,12 +35,21 @@
 			"buildResources": "assets/images"
 		},
 		"artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
+		"win": {
+			"extraFiles": {
+				"from": "resources/nircmdc.exe",
+				"to": "resources/nircmdc.exe"
+			}
+		},
 		"nsis": {
 			"oneClick": false,
 			"perMachine": false,
 			"allowElevation": true,
 			"allowToChangeInstallationDirectory": true,
 			"artifactName": "${productName} Setup ${version} ${arch}.${ext}"
+		},
+		"linux": {
+			"category": "Utility"
 		}
 	},
 	"postinstall": "electron-builder install-app-deps"

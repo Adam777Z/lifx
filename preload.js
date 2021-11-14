@@ -26,6 +26,7 @@ contextBridge.exposeInMainWorld(
 	{
 		'platform': process.platform,
 		'quitApp': () => ipcRenderer.send('quitApp'),
-		'lock': () => ipcRenderer.send('lock')
+		'lock': () => ipcRenderer.send('lock'),
+		'sleep': () => ipcRenderer.send('sleep')
 	}
 );
